@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>42월드 - 나의 미니홈피</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100vw;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #c8c8d8;
+      background-image:
+        linear-gradient(rgba(150,150,180,0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(150,150,180,0.3) 1px, transparent 1px);
+      background-size: 20px 20px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, '돋움', Dotum, sans-serif;
+      image-rendering: pixelated;
+      padding: 20px;
+    }
+
+    /* ===== CRT 모니터 ===== */
+    .monitor {
+      position: relative;
+      width: 880px;
+      background: #d0d0d8;
+      border-radius: 20px 20px 40px 40px;
+      padding: 30px 40px 60px 40px;
+      border: 4px solid #888899;
+      box-shadow:
+        inset 0 0 30px rgba(0,0,0,0.2),
+        4px 4px 0 #888,
+        8px 8px 0 #666,
+        0 0 0 8px #b8b8c8,
+        0 0 0 12px #888899;
+    }
+
+    .screen {
+      background: #b8b8cc;
+      border-radius: 8px;
+      padding: 10px;
+      border: 3px inset #888;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .monitor-stand {
+      width: 120px;
+      height: 20px;
+      background: #b0b0c0;
+      margin: 0 auto;
+      border-radius: 0 0 4px 4px;
+      border: 3px solid #888899;
+      border-top: none;
+    }
+
+    .monitor-base {
+      width: 200px;
+      height: 12px;
+      background: #a8a8b8;
+      margin: 0 auto;
+      border-radius: 2px;
+      border: 3px solid #888899;
+      border-top: none;
+    }
+
+    /* ===== 공통 윈도우 ===== */
+    .win-panel {
+      background: #c8c8e0;
+      border: 3px solid #888;
+      box-shadow:
+        inset -2px -2px 0 #666,
+        inset 2px 2px 0 #eeeef8;
+      image-rendering: pixelated;
+    }
+
+    .win-title-bar {
+      background: linear-gradient(to right, #7878aa, #a8a8cc);
+      padding: 3px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .win-title-text {
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: 1px;
+    }
+
+    .win-controls {
+      display: flex;
+      gap: 2px;
+    }
+
+    .win-btn {
+      width: 14px;
+      height: 13px;
+      background: #c8c8d8;
+      border: 2px solid;
+      border-color: #eee #888 #888 #eee;
+      font-size: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-family: monospace;
+      color: #333;
+    }
+
+    .win-btn:active {
+      border-color: #888 #eee #eee #888;
+    }
+
+    .win-body {
+      padding: 6px;
+    }
+
+    /* ===== 메인 타이틀바 ===== */
+    .main-title-bar {
+      background: linear-gradient(to right, #7878aa, #a8a8cc);
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .main-title-text {
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: #f8e84a;
+      text-shadow:
+        2px 2px 0 #8a6800,
+        -1px -1px 0 #c8a000,
+        3px 3px 0 #5a4400;
+      letter-spacing: 4px;
+    }
+
+    .main-controls {
+      display: flex;
+      gap: 3px;
+    }
+
+    .main-btn {
+      width: 16px;
+      height: 14px;
+      background: #c8c8d8;
+      border: 2px solid;
+      border-color: #eee #888 #888 #eee;
+      font-size: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-family: monospace;
+      color: #333;
+    }
+
+    /* ===== 오늘의 한마디 바 ===== */
+    .hanmadi-bar {
+      background: #d8d8f0;
+      border: 2px solid;
+      border-color: #888 #eee #eee #888;
+      padding: 5px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .hanmadi-label {
+      color: #5858a0;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .hanmadi-tag {
+      background: #e86820;
+      color: white;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border: 1px solid #c85010;
+      flex-shrink: 0;
+    }
+
+    .hanmadi-text {
+      flex: 1;
+      color: #444;
+      font-size: 11px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .hanmadi-edit {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+
+    .hanmadi-edit:hover {
+      opacity: 1;
+    }
+
+    /* ===== 메인 레이아웃 (3컬럼 + 사이드메뉴) ===== */
+    .main-layout {
+      display: flex;
+      gap: 0;
+      padding: 8px;
+    }
+
+    .content-area {
+      flex: 1;
+      display: flex;
+      gap: 6px;
+    }
+
+    /* 왼쪽: 미니룸 */
+    .col-left {
+      width: 185px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* 중간: 보드 */
+    .col-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* 오른쪽: 도토리 & 레벨 */
+    .col-right {
+      width: 210px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* 오른쪽 사이드 메뉴 */
+    .side-menu {
+      width: 70px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-left: 6px;
+    }
+
+    .side-menu-item {
+      background: #c8c8e0;
+      border: 2px solid;
+      border-color: #eee #888 #888 #eee;
+      padding: 6px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .side-menu-item:hover {
+      background: #d8d8f0;
+    }
+
+    .side-menu-item:active {
+      border-color: #888 #eee #eee #888;
+    }
+
+    .side-menu-item.active {
+      background: #7878aa;
+      border-color: #5858a0 #a8a8cc #a8a8cc #5858a0;
+    }
+
+    .side-menu-item.active .side-menu-label {
+      color: white;
+    }
+
+    .side-menu-icon {
+      width: 22px;
+      height: 22px;
+      image-rendering: pixelated;
+    }
+
+    .side-menu-label {
+      font-size: 9px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-weight: 800;
+      color: #444;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+
+    /* ===== 미니룸 ===== */
+    .minimi-room {
+      background: #f2f0e8;
+      height: 170px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .minimi-room .wallpaper {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 32px;
+      background: #f5f4f0;
+      border-bottom: 2px solid #d8d0b8;
+    }
+
+    .minimi-room::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 32px;
+      background: #c8a060;
+      background-image:
+        repeating-linear-gradient(90deg, transparent 0px, transparent 19px, rgba(0,0,0,0.12) 19px, rgba(0,0,0,0.12) 21px),
+        repeating-linear-gradient(0deg, transparent 0px, transparent 9px, rgba(0,0,0,0.08) 9px, rgba(0,0,0,0.08) 11px);
+      border-top: 2px solid #a07840;
+    }
+
+    .minimi-room::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 52px;
+      background: #2d6a2a;
+      border: 3px solid #7a5a30;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.3), 2px 2px 0 #5a4020;
+    }
+
+    .pixel-girl {
+      image-rendering: pixelated;
+      width: 52px;
+      height: 91px;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 34px;
+    }
+
+    /* 가구 - 책장 */
+    .furniture-bookshelf {
+      position: absolute;
+      top: 8px;
+      left: 6px;
+      z-index: 0;
+    }
+
+    /* 가구 - 화분 */
+    .furniture-plant {
+      position: absolute;
+      bottom: 34px;
+      right: 8px;
+      z-index: 0;
+    }
+
+    /* 학생 정보 */
+    .student-info {
+      background: #d8d8f0;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid #aaa;
+    }
+
+    .student-avatar {
+      width: 28px;
+      height: 28px;
+      background: #7878aa;
+      border: 2px solid #5858a0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .student-details {
+      font-size: 10px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      color: #333;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .student-details .nickname {
+      color: #5858a0;
+      font-weight: 800;
+    }
+
+    /* ===== 보드 (뉴스) ===== */
+    .board-content {
+      flex: 1;
+      font-size: 11px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      color: #333;
+      line-height: 1.7;
+      padding: 6px 8px;
+    }
+
+    .board-content .news-title {
+      font-weight: 800;
+      color: #5858a0;
+      margin-bottom: 4px;
+    }
+
+    .board-content .news-item {
+      padding: 2px 0;
+      border-bottom: 1px dotted #bbb;
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .board-content .news-item::before {
+      content: '▸';
+      color: #7878aa;
+      flex-shrink: 0;
+      font-size: 8px;
+      margin-top: 2px;
+    }
+
+    /* 명언 영역 */
+    .quote-box {
+      padding: 8px;
+      font-size: 11px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      color: #444;
+      line-height: 1.6;
+    }
+
+    .quote-text {
+      font-style: italic;
+      color: #333;
+      font-weight: 700;
+    }
+
+    .quote-author {
+      text-align: right;
+      font-size: 10px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    .quote-icon {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    /* ===== 도토리 & 레벨 ===== */
+    .dotori-section {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .dotori-buttons-top {
+      display: flex;
+      gap: 4px;
+      padding: 6px;
+      justify-content: center;
+    }
+
+    .dotori-btn {
+      background: linear-gradient(180deg, #f07830 0%, #d05818 100%);
+      border: 2px solid;
+      border-color: #f8b060 #882800 #882800 #f8b060;
+      color: white;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 12px;
+      cursor: pointer;
+      text-shadow: 1px 1px 0 #882800;
+    }
+
+    .dotori-btn:hover {
+      background: linear-gradient(180deg, #f88838 0%, #e06828 100%);
+    }
+
+    .dotori-btn:active {
+      border-color: #882800 #f8b060 #f8b060 #882800;
+      transform: translate(1px, 1px);
+    }
+
+    .dotori-btn.secondary {
+      background: linear-gradient(180deg, #9898cc 0%, #7878aa 100%);
+      border-color: #b8b8e8 #5858a0 #5858a0 #b8b8e8;
+      text-shadow: 1px 1px 0 #5858a0;
+    }
+
+    .dotori-btn.secondary:hover {
+      background: linear-gradient(180deg, #a8a8d8 0%, #8888b8 100%);
+    }
+
+    /* 도토리 이미지 영역 */
+    .dotori-image-area {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      flex: 1;
+    }
+
+    .dotori-pile {
+      image-rendering: pixelated;
+    }
+
+    /* 레벨 & 경험치 */
+    .level-area {
+      padding: 6px 10px;
+      text-align: center;
+    }
+
+    .level-text {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 14px;
+      color: #5858a0;
+      margin-bottom: 6px;
+    }
+
+    .exp-bar-container {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .exp-bar {
+      flex: 1;
+      height: 10px;
+      background: #fff;
+      border: 2px solid;
+      border-color: #888 #eee #eee #888;
+      overflow: hidden;
+    }
+
+    .exp-bar-fill {
+      height: 100%;
+      background: linear-gradient(to right, #28a028, #60d060);
+      transition: width 0.5s ease;
+    }
+
+    .exp-text {
+      font-size: 8px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-weight: 800;
+      color: #555;
+      flex-shrink: 0;
+    }
+
+    /* 도토리 개수 */
+    .dotori-count-area {
+      background: #e8e8f8;
+      border-top: 1px solid #aaa;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .dotori-count-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .dotori-icon-small {
+      image-rendering: pixelated;
+    }
+
+    .dotori-count-label {
+      font-size: 11px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-weight: 800;
+      color: #5858a0;
+    }
+
+    .dotori-count-number {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 20px;
+      color: #e86820;
+      text-shadow: 1px 1px 0 #a04010;
+    }
+
+    .dotori-next-badge {
+      font-size: 9px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      color: #888;
+      font-weight: 700;
+    }
+
+    .dotori-buttons-bottom {
+      display: flex;
+      gap: 4px;
+      padding: 6px;
+      justify-content: center;
+    }
+
+    /* ===== 모달 오버레이 ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal-window {
+      background: #c8c8e0;
+      border: 3px solid #888;
+      box-shadow:
+        inset -2px -2px 0 #666,
+        inset 2px 2px 0 #eeeef8,
+        6px 6px 0 rgba(0,0,0,0.3);
+      min-width: 340px;
+      max-width: 420px;
+    }
+
+    .modal-title-bar {
+      background: linear-gradient(to right, #7878aa, #a8a8cc);
+      padding: 4px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title-text {
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: 1px;
+    }
+
+    .modal-close {
+      width: 14px;
+      height: 12px;
+      background: #c8c8d8;
+      border: 2px solid;
+      border-color: #eee #888 #888 #eee;
+      font-size: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-family: monospace;
+      color: #333;
+    }
+
+    .modal-body {
+      padding: 16px;
+    }
+
+    .modal-label {
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      color: #2a2a5a;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .modal-select, .modal-input, .modal-textarea {
+      width: 100%;
+      background: #fffff8;
+      border: 2px solid;
+      border-color: #888 #eee #eee #888;
+      padding: 4px 8px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      outline: none;
+      color: #333;
+      box-shadow: inset 1px 1px 3px rgba(0,0,0,0.15);
+    }
+
+    .modal-select {
+      height: 28px;
+    }
+
+    .modal-textarea {
+      height: 80px;
+      resize: none;
+      line-height: 1.5;
+    }
+
+    .modal-textarea:focus, .modal-input:focus, .modal-select:focus {
+      border-color: #5858a0 #ddd #ddd #5858a0;
+    }
+
+    .modal-btn-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 12px;
+      justify-content: flex-end;
+    }
+
+    .modal-btn {
+      background: linear-gradient(180deg, #f07830 0%, #d05818 100%);
+      border: 2px solid;
+      border-color: #f8b060 #882800 #882800 #f8b060;
+      color: white;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 14px;
+      cursor: pointer;
+      text-shadow: 1px 1px 0 #882800;
+    }
+
+    .modal-btn:hover {
+      background: linear-gradient(180deg, #f88838 0%, #e06828 100%);
+    }
+
+    .modal-btn.cancel {
+      background: #c8c8d8;
+      border-color: #eee #888 #888 #eee;
+      color: #333;
+      text-shadow: none;
+    }
+
+    .modal-note {
+      font-size: 9px;
+      color: #888;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .modal-remaining {
+      font-size: 10px;
+      color: #e86820;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    /* 감정 선택 그리드 */
+    .emotion-grid {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .emotion-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 6px 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.1s;
+      border-radius: 4px;
+    }
+
+    .emotion-option:hover {
+      background: #e8e8f8;
+    }
+
+    .emotion-option.selected {
+      border: 2px solid #5858a0;
+      background: #d8d8f0;
+    }
+
+    .emotion-emoji {
+      font-size: 24px;
+    }
+
+    .emotion-name {
+      font-size: 9px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-weight: 800;
+      color: #555;
+    }
+
+    .modal-success {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .modal-success .success-emoji {
+      font-size: 40px;
+      margin-bottom: 8px;
+    }
+
+    .modal-success .success-text {
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      color: #5858a0;
+    }
+
+    .modal-success .success-sub {
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 11px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    /* ===== 하단 상태바 ===== */
+    .status-bar {
+      background: #c8c8d8;
+      border-top: 2px solid;
+      border-color: #888 #eee #eee #888;
+      padding: 3px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      color: #444;
+      font-weight: 700;
+    }
+
+    .status-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-divider {
+      width: 1px;
+      height: 12px;
+      background: #888;
+    }
+
+    /* ===== 미니미 말풍선 ===== */
+    .speech-bubble {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border: 2px solid #5858a0;
+      padding: 3px 8px;
+      font-size: 8px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      color: #5858a0;
+      white-space: nowrap;
+      z-index: 2;
+      font-weight: 800;
+    }
+
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid #5858a0;
+    }
+  </style>
+</head>
+<body>
+
+  <div style="display:flex; flex-direction:column; align-items:center;">
+    <div class="monitor">
+      <div class="screen">
+        <div class="win-panel">
+
+          <!-- 메인 타이틀바 -->
+          <div class="main-title-bar">
+            <span class="main-title-text" id="page-title">나의 42월드</span>
+            <div class="main-controls">
+              <div class="main-btn">_</div>
+              <div class="main-btn">□</div>
+              <div class="main-btn" onclick="logout()">✕</div>
+            </div>
+          </div>
+
+          <!-- 오늘의 한마디 -->
+          <div class="hanmadi-bar">
+            <span class="hanmadi-label">오늘의 한마디</span>
+            <span class="hanmadi-tag">성장중</span>
+            <span class="hanmadi-text" id="hanmadi-text">오늘도 열심히 공부하는 멋진 하루!</span>
+            <!-- 연필 아이콘 -->
+            <svg class="hanmadi-edit" viewBox="0 0 16 16" onclick="editHanmadi()" style="image-rendering:pixelated">
+              <rect x="2" y="10" width="10" height="4" fill="#c8a060"/>
+              <rect x="3" y="2" width="3" height="10" fill="#f8e84a" transform="rotate(-10 4 7)"/>
+              <rect x="2" y="1" width="3" height="2" fill="#e86820" transform="rotate(-10 3 2)"/>
+              <rect x="1" y="12" width="2" height="2" fill="#333"/>
+            </svg>
+          </div>
+
+          <!-- 메인 레이아웃 -->
+          <div class="main-layout">
+            <div class="content-area">
+
+              <!-- ===== 왼쪽: 미니룸 ===== -->
+              <div class="col-left">
+                <div class="win-panel" style="flex:1; display:flex; flex-direction:column;">
+                  <div class="win-title-bar">
+                    <span class="win-title-text">미니룸</span>
+                    <div class="win-controls">
+                      <div class="win-btn">_</div>
+                      <div class="win-btn">✕</div>
+                    </div>
+                  </div>
+                  <div class="minimi-room" style="flex:1;">
+                    <div class="wallpaper"></div>
+
+                    <!-- 책장 -->
+                    <svg class="furniture-bookshelf" width="36" height="50" viewBox="0 0 18 25" style="image-rendering:pixelated">
+                      <rect x="0" y="0" width="18" height="25" fill="#8B5E3C"/>
+                      <rect x="1" y="0" width="16" height="1" fill="#a07050"/>
+                      <rect x="1" y="1" width="16" height="7" fill="#6B3E1C"/>
+                      <rect x="2" y="2" width="4" height="5" fill="#d04040"/>
+                      <rect x="7" y="2" width="3" height="5" fill="#4080d0"/>
+                      <rect x="11" y="3" width="4" height="4" fill="#40a040"/>
+                      <rect x="1" y="8" width="16" height="1" fill="#a07050"/>
+                      <rect x="1" y="9" width="16" height="7" fill="#6B3E1C"/>
+                      <rect x="2" y="10" width="5" height="5" fill="#e0a020"/>
+                      <rect x="8" y="10" width="3" height="5" fill="#a04080"/>
+                      <rect x="12" y="11" width="4" height="4" fill="#4060d0"/>
+                      <rect x="1" y="16" width="16" height="1" fill="#a07050"/>
+                      <rect x="1" y="17" width="16" height="7" fill="#6B3E1C"/>
+                      <rect x="3" y="18" width="4" height="5" fill="#60b060"/>
+                      <rect x="9" y="18" width="3" height="5" fill="#d06030"/>
+                      <rect x="1" y="24" width="16" height="1" fill="#a07050"/>
+                    </svg>
+
+                    <!-- 화분 -->
+                    <svg class="furniture-plant" width="24" height="36" viewBox="0 0 12 18" style="image-rendering:pixelated">
+                      <rect x="3" y="0" width="2" height="6" fill="#2d6a2a"/>
+                      <rect x="7" y="0" width="2" height="6" fill="#2d6a2a"/>
+                      <rect x="1" y="2" width="4" height="4" fill="#3a8a30"/>
+                      <rect x="7" y="1" width="4" height="5" fill="#3a8a30"/>
+                      <rect x="3" y="0" width="6" height="4" fill="#4aaa40"/>
+                      <rect x="5" y="0" width="2" height="2" fill="#60c050"/>
+                      <rect x="4" y="6" width="4" height="2" fill="#2d6a2a"/>
+                      <rect x="3" y="8" width="6" height="8" fill="#c86030"/>
+                      <rect x="4" y="8" width="4" height="1" fill="#d88050"/>
+                      <rect x="2" y="15" width="8" height="2" fill="#a04820"/>
+                      <rect x="2" y="16" width="8" height="2" fill="#884018"/>
+                    </svg>
+
+                    <div class="speech-bubble">안녕! 오늘도 파이팅~</div>
+
+                    <!-- 분필 통 -->
+                    <svg style="position:absolute;bottom:34px;right:6px;image-rendering:pixelated;z-index:1;" width="12" height="14" viewBox="0 0 6 7">
+                      <rect x="1" y="0" width="4" height="6" fill="#e8e8d0" stroke="#a0a080" stroke-width="0.5"/>
+                      <rect x="1" y="0" width="4" height="1" fill="#c8c8a8"/>
+                      <rect x="2" y="1" width="1" height="4" fill="#f0f0e0"/>
+                      <rect x="4" y="1" width="1" height="4" fill="#d0d0b8"/>
+                      <rect x="0" y="6" width="6" height="1" fill="#c8a060"/>
+                    </svg>
+
+                    <!-- 캐릭터 SVG (index.html 동일) -->
+                    <svg class="pixel-girl" viewBox="0 0 32 56" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="10" y="0" width="12" height="2" fill="#1a0e04"/>
+                      <rect x="8" y="2" width="16" height="2" fill="#1a0e04"/>
+                      <rect x="8" y="4" width="16" height="4" fill="#2e1c0a"/>
+                      <rect x="7" y="6" width="2" height="10" fill="#1a0e04"/>
+                      <rect x="23" y="6" width="2" height="10" fill="#1a0e04"/>
+                      <rect x="9" y="6" width="3" height="2" fill="#2e1c0a"/>
+                      <rect x="20" y="6" width="3" height="2" fill="#2e1c0a"/>
+                      <rect x="8" y="16" width="3" height="2" fill="#1a0e04"/>
+                      <rect x="21" y="16" width="3" height="2" fill="#1a0e04"/>
+                      <rect x="9" y="6" width="14" height="12" fill="#f5d0a8"/>
+                      <rect x="9" y="12" width="3" height="2" fill="#f0a898" opacity="0.5"/>
+                      <rect x="20" y="12" width="3" height="2" fill="#f0a898" opacity="0.5"/>
+                      <rect x="11" y="8" width="4" height="1" fill="#2e1c0a"/>
+                      <rect x="17" y="8" width="4" height="1" fill="#2e1c0a"/>
+                      <rect x="11" y="9" width="4" height="3" fill="#f8f8f8"/>
+                      <rect x="17" y="9" width="4" height="3" fill="#f8f8f8"/>
+                      <rect x="12" y="10" width="2" height="2" fill="#3a2060"/>
+                      <rect x="18" y="10" width="2" height="2" fill="#3a2060"/>
+                      <rect x="13" y="10" width="1" height="1" fill="#ffffff"/>
+                      <rect x="19" y="10" width="1" height="1" fill="#ffffff"/>
+                      <rect x="15" y="13" width="2" height="1" fill="#d8a080" opacity="0.7"/>
+                      <rect x="13" y="15" width="2" height="1" fill="#e88070"/>
+                      <rect x="15" y="16" width="2" height="1" fill="#c86050"/>
+                      <rect x="17" y="15" width="2" height="1" fill="#e88070"/>
+                      <rect x="14" y="18" width="4" height="2" fill="#f5d0a8"/>
+                      <rect x="10" y="20" width="12" height="14" fill="#d8d8f8"/>
+                      <rect x="10" y="20" width="6" height="6" fill="#b8b8e8"/>
+                      <rect x="10" y="20" width="4" height="4" fill="#c8c8f0"/>
+                      <rect x="16" y="20" width="6" height="6" fill="#b8b8e8"/>
+                      <rect x="18" y="20" width="4" height="4" fill="#c8c8f0"/>
+                      <rect x="14" y="20" width="4" height="8" fill="#e8f0ff"/>
+                      <rect x="15" y="22" width="2" height="6" fill="#d0d8f8"/>
+                      <rect x="15" y="24" width="2" height="2" fill="#9090c0"/>
+                      <rect x="15" y="28" width="2" height="2" fill="#9090c0"/>
+                      <rect x="6" y="20" width="4" height="10" fill="#d8d8f8"/>
+                      <rect x="7" y="20" width="2" height="2" fill="#b8b8e8"/>
+                      <rect x="6" y="30" width="4" height="4" fill="#f5d0a8"/>
+                      <rect x="22" y="20" width="4" height="10" fill="#d8d8f8"/>
+                      <rect x="23" y="20" width="2" height="2" fill="#b8b8e8"/>
+                      <rect x="22" y="30" width="4" height="4" fill="#f5d0a8"/>
+                      <rect x="9" y="34" width="14" height="2" fill="#9898d8"/>
+                      <rect x="9" y="36" width="14" height="8" fill="#8080c8"/>
+                      <rect x="10" y="36" width="2" height="8" fill="#9090d0" opacity="0.5"/>
+                      <rect x="14" y="36" width="2" height="8" fill="#9090d0" opacity="0.5"/>
+                      <rect x="18" y="36" width="2" height="8" fill="#9090d0" opacity="0.5"/>
+                      <rect x="21" y="36" width="1" height="8" fill="#6868b0" opacity="0.4"/>
+                      <rect x="10" y="44" width="5" height="4" fill="#f0f0ff"/>
+                      <rect x="17" y="44" width="5" height="4" fill="#f0f0ff"/>
+                      <rect x="10" y="44" width="5" height="1" fill="#d8d8f0"/>
+                      <rect x="17" y="44" width="5" height="1" fill="#d8d8f0"/>
+                      <rect x="9" y="48" width="7" height="4" fill="#1a0e04"/>
+                      <rect x="16" y="48" width="7" height="4" fill="#1a0e04"/>
+                      <rect x="9" y="48" width="2" height="2" fill="#2e1c0a"/>
+                      <rect x="16" y="48" width="2" height="2" fill="#2e1c0a"/>
+                      <rect x="15" y="49" width="1" height="2" fill="#3a2a18"/>
+                      <rect x="22" y="49" width="1" height="2" fill="#3a2a18"/>
+                    </svg>
+                  </div>
+
+                  <!-- 학생 정보 -->
+                  <div class="student-info">
+                    <div class="student-avatar">
+                      <svg width="20" height="20" viewBox="0 0 10 10" style="image-rendering:pixelated">
+                        <rect x="3" y="0" width="4" height="3" fill="#2e1c0a"/>
+                        <rect x="3" y="2" width="4" height="4" fill="#f5d0a8"/>
+                        <rect x="4" y="3" width="1" height="1" fill="#2e1c0a"/>
+                        <rect x="6" y="3" width="1" height="1" fill="#2e1c0a"/>
+                        <rect x="4" y="5" width="2" height="1" fill="#e88070"/>
+                        <rect x="2" y="6" width="6" height="4" fill="#d8d8f8"/>
+                      </svg>
+                    </div>
+                    <div class="student-details">
+                      <div>학번: <span class="nickname" id="student-id">—</span></div>
+                      <div>이름: <span class="nickname" id="student-name">—</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== 중간: 보드 ===== -->
+              <div class="col-center">
+                <!-- 보드 (뉴스) -->
+                <div class="win-panel" style="flex:1;">
+                  <div class="win-title-bar">
+                    <span class="win-title-text">보드</span>
+                    <div class="win-controls">
+                      <div class="win-btn">_</div>
+                      <div class="win-btn">✕</div>
+                    </div>
+                  </div>
+                  <div class="board-content">
+                    <div class="news-title">최근 뉴스</div>
+                    <div id="news-list">
+                      <div class="news-item">42월드에 오신 걸 환영합니다!</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 오늘의 명언 / 좋은 글귀 -->
+                <div class="win-panel">
+                  <div class="win-title-bar">
+                    <span class="win-title-text">오늘의 명언 / 좋은 글귀</span>
+                    <div class="win-controls">
+                      <div class="win-btn">✕</div>
+                    </div>
+                  </div>
+                  <div class="quote-box">
+                    <div class="quote-icon">
+                      <svg width="14" height="14" viewBox="0 0 14 14" style="image-rendering:pixelated">
+                        <rect x="3" y="1" width="8" height="10" fill="#f0e8d0"/>
+                        <rect x="5" y="3" width="4" height="1" fill="#888"/>
+                        <rect x="5" y="5" width="4" height="1" fill="#888"/>
+                        <rect x="5" y="7" width="3" height="1" fill="#888"/>
+                        <rect x="1" y="9" width="3" height="4" fill="#c8a060"/>
+                        <rect x="2" y="8" width="1" height="2" fill="#c8a060"/>
+                      </svg>
+                      <span style="font-size:10px; font-weight:800; color:#7878aa;">오늘의 명언</span>
+                    </div>
+                    <div class="quote-text">"성공은 끝이 아니고, 실패는 치명적이지 않다. 중요한 것은 계속하려는 용기다."</div>
+                    <div class="quote-author">— 윈스턴 처칠</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ===== 오른쪽: 도토리 & 레벨 현황 ===== -->
+              <div class="col-right">
+                <div class="win-panel" style="flex:1; display:flex; flex-direction:column;">
+                  <div class="win-title-bar">
+                    <span class="win-title-text">도토리 & 레벨 현황</span>
+                    <div class="win-controls">
+                      <div class="win-btn">✕</div>
+                    </div>
+                  </div>
+                  <div class="dotori-section">
+                    <!-- 상단 버튼 -->
+                    <div class="dotori-buttons-top">
+                      <button class="dotori-btn" onclick="alert('도토리를 충전하려면 숙제를 완료하세요! 📚')">충전하기</button>
+                      <button class="dotori-btn secondary" onclick="window.location.href='shop.html'">상점가기</button>
+                    </div>
+
+                    <!-- 도토리 이미지 -->
+                    <div class="dotori-image-area">
+                      <svg class="dotori-pile" width="120" height="90" viewBox="0 0 60 45" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 도토리 더미 -->
+                        <!-- 밑줄 도토리들 -->
+                        <ellipse cx="30" cy="38" rx="28" ry="6" fill="#c88040" opacity="0.3"/>
+                        <!-- 도토리 1 -->
+                        <rect x="6" y="26" width="10" height="12" rx="2" fill="#c87830"/>
+                        <rect x="7" y="24" width="8" height="4" fill="#8B5E3C"/>
+                        <rect x="10" y="22" width="2" height="3" fill="#5a3a1a"/>
+                        <rect x="8" y="28" width="2" height="2" fill="#e0a060" opacity="0.5"/>
+                        <!-- 도토리 2 -->
+                        <rect x="14" y="22" width="10" height="12" rx="2" fill="#d08838"/>
+                        <rect x="15" y="20" width="8" height="4" fill="#8B5E3C"/>
+                        <rect x="18" y="18" width="2" height="3" fill="#5a3a1a"/>
+                        <rect x="16" y="24" width="2" height="2" fill="#e8b070" opacity="0.5"/>
+                        <!-- 도토리 3 -->
+                        <rect x="24" y="24" width="10" height="12" rx="2" fill="#c08030"/>
+                        <rect x="25" y="22" width="8" height="4" fill="#8B5E3C"/>
+                        <rect x="28" y="20" width="2" height="3" fill="#5a3a1a"/>
+                        <rect x="26" y="26" width="2" height="2" fill="#d8a060" opacity="0.5"/>
+                        <!-- 도토리 4 -->
+                        <rect x="34" y="26" width="10" height="12" rx="2" fill="#d09038"/>
+                        <rect x="35" y="24" width="8" height="4" fill="#8B5E3C"/>
+                        <rect x="38" y="22" width="2" height="3" fill="#5a3a1a"/>
+                        <rect x="36" y="28" width="2" height="2" fill="#e8b870" opacity="0.5"/>
+                        <!-- 도토리 5 -->
+                        <rect x="44" y="28" width="10" height="10" rx="2" fill="#c87830"/>
+                        <rect x="45" y="26" width="8" height="4" fill="#8B5E3C"/>
+                        <rect x="48" y="24" width="2" height="3" fill="#5a3a1a"/>
+                        <!-- 위 도토리들 -->
+                        <rect x="10" y="16" width="10" height="10" rx="2" fill="#d89840"/>
+                        <rect x="11" y="14" width="8" height="4" fill="#8B5E3C"/>
+                        <rect x="14" y="12" width="2" height="3" fill="#5a3a1a"/>
+                        <rect x="12" y="18" width="2" height="2" fill="#e8b060" opacity="0.5"/>
+                        <rect x="22" y="14" width="10" height="12" rx="2" fill="#c88838"/>
+                        <rect x="23" y="12" width="8" height="4" fill="#8B5E3C"/>
+                        <rect x="26" y="10" width="2" height="3" fill="#5a3a1a"/>
+                        <rect x="36" y="18" width="10" height="10" rx="2" fill="#d08030"/>
+                        <rect x="37" y="16" width="8" height="4" fill="#8B5E3C"/>
+                        <rect x="40" y="14" width="2" height="3" fill="#5a3a1a"/>
+                        <!-- 맨 위 -->
+                        <rect x="18" y="6" width="10" height="10" rx="2" fill="#d8a048"/>
+                        <rect x="19" y="4" width="8" height="4" fill="#8B5E3C"/>
+                        <rect x="22" y="2" width="2" height="3" fill="#5a3a1a"/>
+                        <rect x="20" y="8" width="2" height="2" fill="#e8c070" opacity="0.5"/>
+                        <rect x="30" y="8" width="10" height="10" rx="2" fill="#c89038"/>
+                        <rect x="31" y="6" width="8" height="4" fill="#8B5E3C"/>
+                        <rect x="34" y="4" width="2" height="3" fill="#5a3a1a"/>
+                      </svg>
+                    </div>
+
+                    <!-- 레벨 & 경험치 -->
+                    <div class="level-area">
+                      <div class="level-text" id="level-text">LV. —</div>
+                      <div class="exp-bar-container">
+                        <div class="exp-bar">
+                          <div class="exp-bar-fill" id="exp-bar-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="exp-text" id="exp-text">— EXP</span>
+                      </div>
+                    </div>
+
+                    <!-- 도토리 개수 -->
+                    <div class="dotori-count-area">
+                      <div class="dotori-count-row">
+                        <!-- 도토리 아이콘 -->
+                        <svg class="dotori-icon-small" width="20" height="22" viewBox="0 0 10 11">
+                          <rect x="4" y="0" width="2" height="2" fill="#5a3a1a"/>
+                          <rect x="2" y="2" width="6" height="2" fill="#8B5E3C"/>
+                          <rect x="1" y="4" width="8" height="6" rx="1" fill="#c87830"/>
+                          <rect x="2" y="5" width="2" height="2" fill="#e0a060" opacity="0.5"/>
+                        </svg>
+                        <span class="dotori-count-label">도토리</span>
+                        <span class="dotori-count-number" id="dotori-count">—</span>
+                        <span class="dotori-count-label">개</span>
+                      </div>
+                      <div class="dotori-next-badge" id="badge-text">로딩 중...</div>
+                      <div class="dotori-buttons-bottom">
+                        <button class="dotori-btn" onclick="alert('도토리를 충전하려면 숙제를 완료하세요! 📚')">충전하기</button>
+                        <button class="dotori-btn secondary" onclick="window.location.href='shop.html'">상점가기</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ===== 오른쪽 사이드 메뉴 ===== -->
+            <div class="side-menu">
+              <div class="side-menu-item active">
+                <svg class="side-menu-icon" viewBox="0 0 16 16">
+                  <rect x="3" y="3" width="10" height="10" fill="#f8e84a" rx="2"/>
+                  <rect x="5" y="7" width="6" height="4" fill="#e86820"/>
+                  <rect x="7" y="4" width="2" height="4" fill="#e86820"/>
+                </svg>
+                <span class="side-menu-label">홈</span>
+              </div>
+              <div class="side-menu-item" onclick="window.location.href='shop.html'">
+                <svg class="side-menu-icon" viewBox="0 0 16 16">
+                  <rect x="5" y="1" width="2" height="2" fill="#5a3a1a"/>
+                  <rect x="3" y="3" width="6" height="2" fill="#8B5E3C"/>
+                  <rect x="2" y="5" width="8" height="6" rx="1" fill="#c87830"/>
+                  <rect x="3" y="6" width="2" height="2" fill="#e0a060" opacity="0.5"/>
+                  <rect x="10" y="10" width="5" height="5" fill="#e86820" rx="1"/>
+                  <rect x="12" y="8" width="1" height="4" fill="#fff"/>
+                  <rect x="10" y="10" width="5" height="1" fill="#fff"/>
+                </svg>
+                <span class="side-menu-label">도토리<br>상점</span>
+              </div>
+              <div class="side-menu-item" onclick="openPraiseModal()">
+                <!-- 칭찬하기: 하트+도토리 아이콘 -->
+                <svg class="side-menu-icon" viewBox="0 0 16 16">
+                  <rect x="3" y="4" width="4" height="4" fill="#e84060" rx="2"/>
+                  <rect x="9" y="4" width="4" height="4" fill="#e84060" rx="2"/>
+                  <rect x="4" y="6" width="8" height="6" fill="#e84060"/>
+                  <rect x="8" y="12" width="0" height="0" fill="#e84060"/>
+                  <polygon points="8,14 3,8 13,8" fill="#e84060"/>
+                  <rect x="6" y="7" width="4" height="3" fill="#f06080" opacity="0.5"/>
+                </svg>
+                <span class="side-menu-label">칭찬<br>하기</span>
+              </div>
+              <div class="side-menu-item" onclick="openGuestbookModal()">
+                <svg class="side-menu-icon" viewBox="0 0 16 16">
+                  <rect x="2" y="2" width="12" height="12" fill="#f0f0ff" rx="1"/>
+                  <rect x="2" y="2" width="12" height="3" fill="#8080c8"/>
+                  <rect x="4" y="7" width="8" height="1" fill="#aaa"/>
+                  <rect x="4" y="9" width="6" height="1" fill="#aaa"/>
+                  <rect x="4" y="11" width="7" height="1" fill="#aaa"/>
+                  <rect x="11" y="10" width="3" height="3" fill="#f07830" rx="1"/>
+                  <rect x="12" y="9" width="1" height="3" fill="#fff"/>
+                  <rect x="11" y="10" width="3" height="1" fill="#fff"/>
+                </svg>
+                <span class="side-menu-label">방명록</span>
+              </div>
+              <div class="side-menu-item" onclick="openDiaryModal()">
+                <!-- 감정일기: 노트+스마일 아이콘 -->
+                <svg class="side-menu-icon" viewBox="0 0 16 16">
+                  <rect x="2" y="1" width="12" height="14" fill="#f0e8d0" rx="1"/>
+                  <rect x="2" y="1" width="12" height="3" fill="#7878aa"/>
+                  <circle cx="8" cy="9" r="3" fill="#f8e84a"/>
+                  <rect x="6" y="8" width="1" height="1" fill="#333"/>
+                  <rect x="9" y="8" width="1" height="1" fill="#333"/>
+                  <rect x="6" y="10" width="4" height="1" fill="#333"/>
+                </svg>
+                <span class="side-menu-label">감정<br>일기</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 상태바 -->
+          <div class="status-bar">
+            <div class="status-section">
+              <span>🟢 접속 중</span>
+              <div class="status-divider"></div>
+              <span id="status-name">4학년 2반</span>
+            </div>
+            <div class="status-section">
+              <span id="clock"></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="monitor-stand"></div>
+    <div class="monitor-base"></div>
+  </div>
+
+  <!-- ===== 칭찬하기 모달 ===== -->
+  <div class="modal-overlay" id="praise-modal">
+    <div class="modal-window">
+      <div class="modal-title-bar">
+        <span class="modal-title-text">💖 칭찬하기</span>
+        <div class="modal-close" onclick="closePraiseModal()">✕</div>
+      </div>
+      <div class="modal-body" id="praise-form">
+        <div class="modal-remaining" id="praise-remaining">오늘 남은 칭찬: 2회</div>
+        <label class="modal-label">칭찬할 친구를 선택하세요</label>
+        <select class="modal-select" id="praise-friend">
+          <option value="">— 친구 선택 —</option>
+          <!-- API에서 동적 로딩 -->
+        </select>
+        <div style="height:8px;"></div>
+        <label class="modal-label">칭찬 메시지를 작성해주세요</label>
+        <textarea class="modal-textarea" id="praise-message" placeholder="예: 오늘 청소할 때 도와줘서 고마워!"></textarea>
+        <div class="modal-note">💡 칭찬하면 친구에게 도토리 1개가 전달돼요! (하루 2회, 최대 도토리 2개)</div>
+        <div class="modal-btn-row">
+          <button class="modal-btn" onclick="sendPraise()">💖 칭찬 보내기</button>
+          <button class="modal-btn cancel" onclick="closePraiseModal()">취소</button>
+        </div>
+      </div>
+      <div class="modal-success" id="praise-success">
+        <div class="success-emoji">💖</div>
+        <div class="success-text">칭찬을 보냈어요!</div>
+        <div class="success-sub" id="praise-success-detail"></div>
+        <div class="modal-btn-row" style="justify-content:center; margin-top:16px;">
+          <button class="modal-btn" onclick="closePraiseModal()">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 방명록 모달 ===== -->
+  <div class="modal-overlay" id="guestbook-modal">
+    <div class="modal-window">
+      <div class="modal-title-bar">
+        <span class="modal-title-text">📖 방명록</span>
+        <div class="modal-close" onclick="closeGuestbookModal()">✕</div>
+      </div>
+      <div class="modal-body">
+        <!-- 받은 방명록 목록 -->
+        <div id="gb-entries" style="max-height:200px;overflow-y:auto;margin-bottom:12px;border:2px solid;border-color:#888 #eee #eee #888;background:#fffff8;padding:6px;"></div>
+        <!-- 글 작성 -->
+        <label class="modal-label">친구 방명록에 글 남기기</label>
+        <select class="modal-select" id="gb-target" style="margin-bottom:8px;"></select>
+        <textarea class="modal-textarea" id="gb-content" placeholder="따뜻한 한마디를 남겨주세요 ✏️" style="height:70px;"></textarea>
+        <div class="modal-btn-row">
+          <button class="modal-btn" onclick="submitGuestbook()">✏️ 글 남기기</button>
+          <button class="modal-btn cancel" onclick="closeGuestbookModal()">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 감정일기 모달 ===== -->
+  <div class="modal-overlay" id="diary-modal">
+    <div class="modal-window">
+      <div class="modal-title-bar">
+        <span class="modal-title-text">📝 감정일기</span>
+        <div class="modal-close" onclick="closeDiaryModal()">✕</div>
+      </div>
+      <div class="modal-body" id="diary-form">
+        <label class="modal-label">오늘의 기분을 골라주세요</label>
+        <div class="emotion-grid" id="emotion-grid">
+          <div class="emotion-option" data-emotion="행복" onclick="selectEmotion(this)">
+            <span class="emotion-emoji">😊</span>
+            <span class="emotion-name">행복</span>
+          </div>
+          <div class="emotion-option" data-emotion="신남" onclick="selectEmotion(this)">
+            <span class="emotion-emoji">🤩</span>
+            <span class="emotion-name">신남</span>
+          </div>
+          <div class="emotion-option" data-emotion="평범" onclick="selectEmotion(this)">
+            <span class="emotion-emoji">😐</span>
+            <span class="emotion-name">평범</span>
+          </div>
+          <div class="emotion-option" data-emotion="피곤" onclick="selectEmotion(this)">
+            <span class="emotion-emoji">😴</span>
+            <span class="emotion-name">피곤</span>
+          </div>
+          <div class="emotion-option" data-emotion="슬픔" onclick="selectEmotion(this)">
+            <span class="emotion-emoji">😢</span>
+            <span class="emotion-name">슬픔</span>
+          </div>
+          <div class="emotion-option" data-emotion="화남" onclick="selectEmotion(this)">
+            <span class="emotion-emoji">😤</span>
+            <span class="emotion-name">화남</span>
+          </div>
+        </div>
+        <label class="modal-label">오늘 하루를 짧게 적어보세요</label>
+        <textarea class="modal-textarea" id="diary-content" placeholder="오늘 있었던 일, 느낀 점을 자유롭게 써보세요 ✏️" style="height:100px;"></textarea>
+        <div class="modal-note">📚 선생님이 읽고 답장을 남겨주실 수 있어요!</div>
+        <div class="modal-btn-row">
+          <button class="modal-btn" onclick="submitDiary()">📝 일기 제출하기</button>
+          <button class="modal-btn cancel" onclick="closeDiaryModal()">취소</button>
+        </div>
+      </div>
+      <div class="modal-success" id="diary-success">
+        <div class="success-emoji">📝</div>
+        <div class="success-text">감정일기를 제출했어요!</div>
+        <div class="success-sub" id="diary-success-detail"></div>
+        <div class="modal-btn-row" style="justify-content:center; margin-top:16px;">
+          <button class="modal-btn" onclick="closeDiaryModal()">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbx_gr2iDmweHonevtE0j9eAIuWUqprshP3K63Vh0DVFAe-J0az3J5W9chf4vizqs6tUtQ/exec';
+
+    // ===== 학생 데이터 로드 =====
+    let currentStudent = null;
+
+    function loadStudentData() {
+      const stored = sessionStorage.getItem('student');
+      if (!stored) {
+        alert('로그인이 필요합니다!');
+        window.location.href = 'index.html';
+        return;
+      }
+      currentStudent = JSON.parse(stored);
+
+      // 타이틀
+      document.getElementById('page-title').textContent = currentStudent.이름 + '의 42월드';
+      document.title = '42월드 - ' + currentStudent.이름;
+
+      // 학생 정보
+      document.getElementById('student-id').textContent = currentStudent.학번;
+      document.getElementById('student-name').textContent = currentStudent.이름;
+
+      // 상태바
+      document.getElementById('status-name').textContent = '4학년 2반 ' + currentStudent.이름;
+
+      // 최신 데이터 API로 갱신
+      refreshStudentData();
+
+      // 친구 목록 로드
+      loadClassmates();
+    }
+
+    function refreshStudentData() {
+      fetch(API_URL + '?action=getStudent&code=' + encodeURIComponent(currentStudent.고유코드))
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            const s = data.student;
+            currentStudent = s;
+            sessionStorage.setItem('student', JSON.stringify(s));
+
+            // 도토리
+            document.getElementById('dotori-count').textContent = s.도토리 || 0;
+
+            // 레벨
+            const lv = s.레벨 || 1;
+            document.getElementById('level-text').textContent = 'LV. ' + lv;
+
+            // 경험치
+            const exp = s.경험치 || 0;
+            const maxExp = lv * 50; // 레벨당 50 EXP
+            const expPercent = Math.min(100, Math.round((exp / maxExp) * 100));
+            document.getElementById('exp-bar-fill').style.width = expPercent + '%';
+            document.getElementById('exp-text').textContent = exp + '/' + maxExp + ' EXP';
+
+            // 뱃지
+            const badge = s.뱃지 || '없음';
+            document.getElementById('badge-text').textContent = badge !== '' ? '🏅 ' + badge : '뱃지를 모아보세요!';
+
+            // 보드 뉴스 업데이트
+            const newsEl = document.getElementById('news-list');
+            newsEl.innerHTML = '';
+            newsEl.innerHTML += '<div class="news-item">' + s.이름 + '아! 42월드에 온 걸 환영해!</div>';
+            newsEl.innerHTML += '<div class="news-item">현재 도토리: ' + (s.도토리 || 0) + '개 보유 중</div>';
+            newsEl.innerHTML += '<div class="news-item">레벨 ' + lv + ' 달성! 경험치 ' + exp + ' 적립</div>';
+            if (badge) newsEl.innerHTML += '<div class="news-item">획득 뱃지: ' + badge + '</div>';
+          }
+        })
+        .catch(err => console.log('데이터 갱신 실패:', err));
+    }
+
+    function loadClassmates() {
+      fetch(API_URL + '?action=getClassmates&code=' + encodeURIComponent(currentStudent.고유코드))
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            const select = document.getElementById('praise-friend');
+            select.innerHTML = '<option value="">— 친구 선택 —</option>';
+            data.classmates.forEach(c => {
+              const opt = document.createElement('option');
+              opt.value = c.고유코드;
+              opt.textContent = c.학번 + ' ' + c.이름;
+              select.appendChild(opt);
+            });
+          }
+        })
+        .catch(err => console.log('친구 목록 로드 실패:', err));
+    }
+
+    // 페이지 로드 시 실행
+    loadStudentData();
+
+    // ===== 매일 바뀌는 명언 =====
+    const quotes = [
+      { text: '성공은 끝이 아니고, 실패는 치명적이지 않다. 중요한 것은 계속하려는 용기다.', author: '윈스턴 처칠' },
+      { text: '천 리 길도 한 걸음부터 시작된다.', author: '노자' },
+      { text: '꿈을 크게 꾸면, 실패해도 별 사이에 있을 것이다.', author: '레스 브라운' },
+      { text: '오늘 할 수 있는 일을 내일로 미루지 마라.', author: '벤자민 프랭클린' },
+      { text: '배움에는 왕도가 없다. 열심히 노력하는 것만이 유일한 길이다.', author: '유클리드' },
+      { text: '실패는 성공의 어머니이다.', author: '토마스 에디슨' },
+      { text: '작은 기회로부터 종종 위대한 업적이 시작된다.', author: '데모스테네스' },
+      { text: '노력하는 사람은 희망을 말하고, 게으른 사람은 불만을 말한다.', author: '중국 속담' },
+      { text: '자신을 믿어라. 당신은 생각보다 더 용감하고, 더 강하다.', author: 'A.A. 밀른' },
+      { text: '좋은 친구는 인생에서 가장 큰 선물이다.', author: '아리스토텔레스' },
+      { text: '읽는 것은 마음의 양식이다.', author: '키케로' },
+      { text: '오늘의 나는 어제의 나보다 더 나은 사람이 되자.', author: '공자' },
+      { text: '웃으면 온 세상이 함께 웃고, 울면 혼자 운다.', author: '엘라 윌콕스' },
+      { text: '친절한 말 한마디가 세상을 바꿀 수 있다.', author: '마더 테레사' },
+      { text: '꾸준히 하면 못 할 일이 없다.', author: '한국 속담' },
+      { text: '매일 조금씩 성장하면, 1년 후에는 놀라운 변화가 있을 거야!', author: '42월드' },
+      { text: '책을 많이 읽는 사람은 높은 곳에서 세상을 바라본다.', author: '정약용' },
+      { text: '최선을 다하면 후회는 없다.', author: '마이클 조던' },
+      { text: '진정한 용기는 두려워도 앞으로 나아가는 것이다.', author: '넬슨 만델라' },
+      { text: '함께 가면 멀리 갈 수 있다.', author: '아프리카 속담' },
+      { text: '오늘 심은 씨앗이 내일의 큰 나무가 된다.', author: '42월드' },
+      { text: '포기하지 않으면 기회는 반드시 온다.', author: '잭 마' },
+      { text: '꿈꾸지 않으면 아무 일도 일어나지 않는다.', author: '월트 디즈니' },
+      { text: '세상에서 가장 어려운 일은 자기 자신을 아는 것이다.', author: '탈레스' },
+      { text: '정직은 최선의 정책이다.', author: '벤자민 프랭클린' },
+      { text: '친구와 나눈 기쁨은 두 배, 나눈 슬픔은 반이 된다.', author: '독일 속담' },
+      { text: '진짜 실패는 도전하지 않는 것이다.', author: '42월드' },
+      { text: '하루에 한 가지 새로운 것을 배우면, 1년이면 365가지를 알게 된다!', author: '42월드' },
+      { text: '감사하는 마음은 가장 큰 힘이 된다.', author: '키케로' },
+      { text: '오늘 흘린 땀은 내일의 보석이 된다.', author: '42월드' },
+      { text: '작은 친절이 큰 감동을 만든다.', author: '42월드' },
+    ];
+
+    // ===== 매일 바뀌는 오늘의 한마디 =====
+    const hanmadiList = [
+      '오늘도 열심히 공부하는 멋진 하루!',
+      '친구에게 먼저 인사해보자! 👋',
+      '점심시간이 기다려지는 하루~ 🍱',
+      '오늘 하루 감사한 일 3가지 떠올려보기!',
+      '새로운 걸 하나 배워볼까? 📚',
+      '웃으면 복이 와요! 😊',
+      '정리정돈 잘하는 우리 반 최고! ✨',
+      '쉬는 시간에 물 마시기! 💧',
+      '친구를 도와주면 도토리가 쏙쏙! 🌰',
+      '오늘의 목표를 세워보자! 🎯',
+      '선생님 말씀 집중! 귀를 쫑긋~ 👂',
+      '체육시간 기대된다! 🏃‍♂️',
+      '도서관에서 재미있는 책 찾아보기! 📖',
+      '급식 남기지 않기 챌린지! 🥗',
+      '오늘도 안전하게! 복도에서 뛰지 않기~ 🚶',
+      '모르는 건 손들고 질문하기! ✋',
+      '예쁜 글씨로 공책 정리! ✏️',
+      '친구의 장점 한 가지 말해주기! 💬',
+      '발표 한 번 해볼까? 용기 내자! 💪',
+      '하교 후 숙제부터! 그 다음 놀기~ 🎮',
+      '오늘 배운 거 한 줄 정리해보기!',
+      '산뜻한 아침! 힘차게 시작! ☀️',
+      '내 자리 깨끗이 정리하기! 🧹',
+      '감사합니다, 고마워요 많이 쓰기! 🙏',
+      '꿈 일기 써볼까? 어젯밤 무슨 꿈 꿨어? 🌙',
+      '우리 반 화이팅! 단체로 파이팅! ✊',
+      '오늘 칭찬 한 번 해보기! 💖',
+      '쓰레기는 쓰레기통에! 환경 지키기 🌏',
+      '양치질 꼼꼼히! 치카치카~ 🦷',
+      '준비물 미리미리 챙기기! 🎒',
+      '다 같이 웃는 하루 만들자! 😄',
+    ];
+
+    // 날짜 기반 랜덤 (매일 같은 결과)
+    function getDayIndex(arr) {
+      const today = new Date();
+      const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+      return seed % arr.length;
+    }
+
+    // 오늘의 명언 적용
+    const todayQuote = quotes[getDayIndex(quotes)];
+    document.querySelector('.quote-text').textContent = '"' + todayQuote.text + '"';
+    document.querySelector('.quote-author').textContent = '— ' + todayQuote.author;
+
+    // 오늘의 한마디 적용
+    document.getElementById('hanmadi-text').textContent = hanmadiList[getDayIndex(hanmadiList)];
+
+    // ===== 시계 =====
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // ===== 로그아웃 =====
+    function logout() {
+      if (confirm('정말 로그아웃 하시겠습니까?')) {
+        window.location.href = 'index.html';
+      }
+    }
+
+    // ===== 오늘의 한마디 편집 =====
+    function editHanmadi() {
+      const current = document.getElementById('hanmadi-text').textContent;
+      const newText = prompt('오늘의 한마디를 입력하세요:', current);
+      if (newText !== null && newText.trim() !== '') {
+        document.getElementById('hanmadi-text').textContent = newText;
+      }
+    }
+
+    // ===== 사이드 메뉴 클릭 =====
+    document.querySelectorAll('.side-menu-item').forEach(item => {
+      item.addEventListener('click', function() {
+        document.querySelectorAll('.side-menu-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // ===== 칭찬하기 =====
+    let praiseRemaining = 2;
+    const praiseKey = 'praise_' + new Date().toISOString().slice(0,10);
+    if (localStorage.getItem(praiseKey)) {
+      praiseRemaining = parseInt(localStorage.getItem(praiseKey));
+    }
+
+    function openPraiseModal() {
+      document.getElementById('praise-modal').classList.add('show');
+      document.getElementById('praise-form').style.display = 'block';
+      document.getElementById('praise-success').style.display = 'none';
+      document.getElementById('praise-remaining').textContent = `오늘 남은 칭찬: ${praiseRemaining}회`;
+      document.getElementById('praise-friend').value = '';
+      document.getElementById('praise-message').value = '';
+    }
+
+    function closePraiseModal() {
+      document.getElementById('praise-modal').classList.remove('show');
+    }
+
+    function sendPraise() {
+      if (praiseRemaining <= 0) {
+        alert('오늘은 칭찬을 다 보냈어요! 내일 다시 도전해주세요 💖');
+        return;
+      }
+      const friend = document.getElementById('praise-friend');
+      const message = document.getElementById('praise-message').value.trim();
+      if (!friend.value) {
+        alert('칭찬할 친구를 선택해주세요!');
+        return;
+      }
+      if (!message) {
+        alert('칭찬 메시지를 작성해주세요!');
+        return;
+      }
+      const friendName = friend.options[friend.selectedIndex].text;
+
+      // API로 칭찬 전송
+      const btn = document.querySelector('#praise-form .modal-btn');
+      btn.textContent = '보내는 중...';
+      btn.disabled = true;
+
+      const url = API_URL + '?action=sendPraise'
+        + '&fromCode=' + encodeURIComponent(currentStudent.고유코드)
+        + '&toCode=' + encodeURIComponent(friend.value)
+        + '&message=' + encodeURIComponent(message);
+
+      fetch(url)
+        .then(r => r.json())
+        .then(data => {
+          btn.textContent = '💖 칭찬 보내기';
+          btn.disabled = false;
+          if (data.success) {
+            praiseRemaining--;
+            localStorage.setItem(praiseKey, praiseRemaining);
+            document.getElementById('praise-form').style.display = 'none';
+            document.getElementById('praise-success').style.display = 'block';
+            document.getElementById('praise-success-detail').textContent = data.message;
+            refreshStudentData(); // 도토리 갱신
+          } else {
+            alert(data.error || '칭찬 전송 실패!');
+          }
+        })
+        .catch(err => {
+          btn.textContent = '💖 칭찬 보내기';
+          btn.disabled = false;
+          alert('서버 연결 실패!');
+        });
+    }
+
+    // ===== 감정일기 =====
+    let selectedEmotion = null;
+    const diaryKey = 'diary_' + new Date().toISOString().slice(0,10);
+
+    function openDiaryModal() {
+      // 이미 작성했는지 확인
+      if (localStorage.getItem(diaryKey)) {
+        document.getElementById('diary-modal').classList.add('show');
+        document.getElementById('diary-form').style.display = 'none';
+        document.getElementById('diary-success').style.display = 'block';
+        document.getElementById('diary-success-detail').textContent = '오늘 감정일기를 이미 제출했어요! 내일 또 써주세요 😊';
+        return;
+      }
+      document.getElementById('diary-modal').classList.add('show');
+      document.getElementById('diary-form').style.display = 'block';
+      document.getElementById('diary-success').style.display = 'none';
+      document.getElementById('diary-content').value = '';
+      selectedEmotion = null;
+      document.querySelectorAll('.emotion-option').forEach(e => e.classList.remove('selected'));
+    }
+
+    function closeDiaryModal() {
+      document.getElementById('diary-modal').classList.remove('show');
+    }
+
+    function selectEmotion(el) {
+      document.querySelectorAll('.emotion-option').forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedEmotion = el.dataset.emotion;
+    }
+
+    function submitDiary() {
+      if (!selectedEmotion) {
+        alert('오늘의 기분을 골라주세요!');
+        return;
+      }
+      const content = document.getElementById('diary-content').value.trim();
+      if (!content) {
+        alert('일기 내용을 작성해주세요!');
+        return;
+      }
+
+      // API로 감정일기 전송
+      const btn = document.querySelector('#diary-form .modal-btn');
+      btn.textContent = '저장 중...';
+      btn.disabled = true;
+
+      const url = API_URL + '?action=submitDiary'
+        + '&code=' + encodeURIComponent(currentStudent.고유코드)
+        + '&emotion=' + encodeURIComponent(selectedEmotion)
+        + '&content=' + encodeURIComponent(content);
+
+      fetch(url)
+        .then(r => r.json())
+        .then(data => {
+          btn.textContent = '📝 일기 제출하기';
+          btn.disabled = false;
+          if (data.success) {
+            localStorage.setItem(diaryKey, 'submitted');
+            document.getElementById('diary-form').style.display = 'none';
+            document.getElementById('diary-success').style.display = 'block';
+            const emojiMap = { '행복':'😊', '신남':'🤩', '평범':'😐', '피곤':'😴', '슬픔':'😢', '화남':'😤' };
+            document.getElementById('diary-success-detail').textContent =
+              `오늘의 기분: ${emojiMap[selectedEmotion]} ${selectedEmotion} — 선생님이 읽어보실 거예요!`;
+          } else {
+            alert(data.error || '저장 실패!');
+          }
+        })
+        .catch(err => {
+          btn.textContent = '📝 일기 제출하기';
+          btn.disabled = false;
+          alert('서버 연결 실패!');
+        });
+    }
+
+    // ===== 방명록 =====
+    function openGuestbookModal() {
+      document.getElementById('guestbook-modal').classList.add('show');
+      loadGuestbook();
+      loadGuestbookTargets();
+    }
+    function closeGuestbookModal() {
+      document.getElementById('guestbook-modal').classList.remove('show');
+    }
+
+    function loadGuestbook() {
+      const div = document.getElementById('gb-entries');
+      div.innerHTML = '<div style="text-align:center;color:#888;font-size:11px;padding:8px;">불러오는 중...</div>';
+      fetch(API_URL + '?action=getGuestbook&code=' + encodeURIComponent(currentStudent.고유코드))
+        .then(r => r.json())
+        .then(data => {
+          if (data.success && data.entries.length > 0) {
+            div.innerHTML = data.entries.map(e => `
+              <div style="border-bottom:1px solid #ddd;padding:5px 3px;">
+                <span style="font-size:10px;font-weight:800;color:${e.작성자유형==='교사'?'#5858a0':'#333'};">
+                  ${e.작성자유형==='교사'?'👑':'✏️'} ${e.작성자}
+                </span>
+                <span style="font-size:9px;color:#aaa;margin-left:4px;">${new Date(e.날짜).toLocaleDateString('ko-KR')}</span>
+                <div style="font-size:11px;color:#444;margin-top:2px;">${e.내용}</div>
+              </div>
+            `).join('');
+          } else {
+            div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:12px;">아직 방명록이 없어요 😊</div>';
+          }
+        })
+        .catch(() => { div.innerHTML = '<div style="color:#cc2222;font-size:11px;padding:8px;">불러오기 실패</div>'; });
+    }
+
+    function loadGuestbookTargets() {
+      fetch(API_URL + '?action=getClassmates&code=' + encodeURIComponent(currentStudent.고유코드))
+        .then(r => r.json())
+        .then(data => {
+          const sel = document.getElementById('gb-target');
+          sel.innerHTML = '<option value="">-- 친구 선택 --</option>';
+          if (data.success) {
+            data.classmates.forEach(c => {
+              sel.innerHTML += `<option value="${c.고유코드}">${c.이름}</option>`;
+            });
+          }
+        });
+    }
+
+    function submitGuestbook() {
+      const toCode = document.getElementById('gb-target').value;
+      const content = document.getElementById('gb-content').value.trim();
+      if (!toCode) { alert('친구를 선택해주세요!'); return; }
+      if (!content) { alert('내용을 입력해주세요!'); return; }
+      fetch(`${API_URL}?action=writeGuestbook&fromCode=${encodeURIComponent(currentStudent.고유코드)}&toCode=${encodeURIComponent(toCode)}&content=${encodeURIComponent(content)}&authorType=학생`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            alert(data.message);
+            document.getElementById('gb-content').value = '';
+          } else {
+            alert(data.error || '실패!');
+          }
+        })
+        .catch(() => alert('서버 연결 실패!'));
+    }
+
+    // ESC로 모달 닫기
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closePraiseModal();
+        closeDiaryModal();
+        closeGuestbookModal();
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>42월드</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #c8c8d8;
+      /* 모눈 배경 */
+      background-image:
+        linear-gradient(rgba(150,150,180,0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(150,150,180,0.3) 1px, transparent 1px);
+      background-size: 20px 20px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, '돋움', Dotum, sans-serif;
+      image-rendering: pixelated;
+    }
+
+    /* CRT 모니터 외곽 */
+    .monitor {
+      position: relative;
+      width: 700px;
+      background: #d0d0d8;
+      border-radius: 20px 20px 40px 40px;
+      padding: 30px 40px 60px 40px;
+      border: 4px solid #888899;
+      box-shadow:
+        inset 0 0 30px rgba(0,0,0,0.2),
+        4px 4px 0 #888,
+        8px 8px 0 #666,
+        0 0 0 8px #b8b8c8,
+        0 0 0 12px #888899;
+    }
+
+    /* 모니터 화면 영역 */
+    .screen {
+      background: #b8b8cc;
+      border-radius: 8px;
+      padding: 20px;
+      border: 3px inset #888;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    /* 메인 창 */
+    .main-window {
+      background: #c8c8e0;
+      border: 3px solid #888;
+      box-shadow:
+        inset -2px -2px 0 #666,
+        inset 2px 2px 0 #eeeef8;
+      image-rendering: pixelated;
+    }
+
+    /* 타이틀바 */
+    .title-bar {
+      background: linear-gradient(to right, #7878aa, #a8a8cc);
+      padding: 4px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .title-bar-text {
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: #f8e84a;
+      text-shadow:
+        2px 2px 0 #8a6800,
+        -1px -1px 0 #c8a000,
+        3px 3px 0 #5a4400;
+      letter-spacing: 6px;
+      padding: 4px 8px;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 3px;
+    }
+
+    .win-btn {
+      width: 16px;
+      height: 14px;
+      background: #c8c8d8;
+      border: 2px solid;
+      border-color: #eee #888 #888 #eee;
+      font-size: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-family: monospace;
+      color: #333;
+    }
+
+    .win-btn:active {
+      border-color: #888 #eee #eee #888;
+    }
+
+    /* 창 내용 */
+    .window-body {
+      display: flex;
+      padding: 12px;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    /* 미니미 홈 패널 */
+    .minimi-panel {
+      width: 160px;
+      flex-shrink: 0;
+    }
+
+    .minimi-window {
+      background: #c8c8e0;
+      border: 2px solid #888;
+      box-shadow:
+        inset -1px -1px 0 #666,
+        inset 1px 1px 0 #eee;
+    }
+
+    .minimi-title-bar {
+      background: linear-gradient(to right, #7878aa, #a8a8cc);
+      padding: 2px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .minimi-title-text {
+      font-size: 8px;
+      color: white;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .minimi-controls {
+      display: flex;
+      gap: 2px;
+    }
+
+    .minimi-btn {
+      width: 10px;
+      height: 10px;
+      background: #c8c8d8;
+      border: 1px solid;
+      border-color: #eee #888 #888 #eee;
+      font-size: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* 미니미 룸 - 교실 배경 */
+    .minimi-room {
+      background: #f2f0e8;
+      height: 155px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    /* 교실 흰 벽 */
+    .minimi-room .wallpaper {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 32px;
+      background: #f5f4f0;
+      border-bottom: 2px solid #d8d0b8;
+    }
+
+    /* 픽셀 캐릭터 (CSS로 그리기) */
+    .pixel-character {
+      position: relative;
+      width: 48px;
+      height: 96px;
+      margin-bottom: 4px;
+      image-rendering: pixelated;
+    }
+
+    /* 마룻바닥 */
+    .minimi-room::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 32px;
+      background: #c8a060;
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          transparent 0px,
+          transparent 19px,
+          rgba(0,0,0,0.12) 19px,
+          rgba(0,0,0,0.12) 21px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          transparent 0px,
+          transparent 9px,
+          rgba(0,0,0,0.08) 9px,
+          rgba(0,0,0,0.08) 11px
+        );
+      border-top: 2px solid #a07840;
+    }
+
+    /* 칠판 */
+    .minimi-room::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 52px;
+      background: #2d6a2a;
+      border: 3px solid #7a5a30;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.3), 2px 2px 0 #5a4020;
+    }
+
+    /* VISIT/TODAY 표시 */
+    .minimi-stats {
+      background: #d8d8f0;
+      padding: 4px;
+      border-top: 1px solid #888;
+    }
+
+    .stat-row {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      margin-bottom: 2px;
+    }
+
+    .stat-icon {
+      width: 10px;
+      height: 8px;
+      background: #6060a0;
+      display: inline-block;
+    }
+
+    .stat-bar {
+      flex: 1;
+      height: 6px;
+      background: #fff;
+      border: 1px solid #888;
+    }
+
+    .stat-bar-fill {
+      height: 100%;
+      background: linear-gradient(to right, #6060c0, #9090e0);
+    }
+
+    .stat-label {
+      font-size: 7px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-weight: 800;
+      color: #333;
+      width: 36px;
+    }
+
+    /* 로그인 패널 */
+    .login-panel {
+      flex: 1;
+      padding: 12px 8px;
+    }
+
+    .login-label {
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 13px;
+      color: #2a2a5a;
+      font-weight: 800;
+      margin-bottom: 10px;
+      display: block;
+      letter-spacing: 1px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .input-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .retro-input {
+      width: 100%;
+      height: 30px;
+      background: #fffff8;
+      border: 2px solid;
+      border-color: #888 #eee #eee #888;
+      padding: 2px 8px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      outline: none;
+      color: #333;
+      box-shadow: inset 2px 2px 4px rgba(0,0,0,0.15);
+      letter-spacing: 2px;
+    }
+
+    .retro-input:focus {
+      background: #fffff8;
+      border-color: #5858a0 #ddd #ddd #5858a0;
+    }
+
+    /* 파도타기 버튼 */
+    .wave-btn {
+      background: linear-gradient(180deg, #f07830 0%, #d05818 100%);
+      border: 3px solid;
+      border-color: #f8b060 #882800 #882800 #f8b060;
+      color: white;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      width: 74px;
+      height: 46px;
+      cursor: pointer;
+      text-align: center;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 3px 3px 0 #550;
+      flex-shrink: 0;
+      text-shadow: 1px 1px 0 #882800;
+    }
+
+    .wave-btn:hover {
+      background: #f07828;
+    }
+
+    .wave-btn:active {
+      border-color: #883800 #f8a060 #f8a060 #883800;
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0 #660;
+    }
+
+    /* 교사 전용 버튼 */
+    .teacher-btn-wrap {
+      display: flex;
+      justify-content: flex-end;
+      padding: 4px 8px 8px;
+    }
+
+    .teacher-btn {
+      background: #c8c8d8;
+      border: 2px solid;
+      border-color: #eee #888 #888 #eee;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #333;
+      padding: 3px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: 1px;
+    }
+
+    .teacher-btn:hover {
+      background: #d8d8e8;
+    }
+
+    .teacher-btn:active {
+      border-color: #888 #eee #eee #888;
+    }
+
+    .teacher-icon {
+      width: 20px;
+      height: 20px;
+      background: #5858a0;
+      display: inline-block;
+      position: relative;
+    }
+
+    /* 모니터 받침 */
+    .monitor-stand {
+      width: 120px;
+      height: 20px;
+      background: #b0b0c0;
+      margin: 0 auto;
+      border-radius: 0 0 4px 4px;
+      border: 3px solid #888899;
+      border-top: none;
+    }
+
+    .monitor-base {
+      width: 200px;
+      height: 12px;
+      background: #a8a8b8;
+      margin: 0 auto;
+      border-radius: 2px;
+      border: 3px solid #888899;
+      border-top: none;
+    }
+
+    /* SVG 픽셀 캐릭터 */
+    .pixel-girl {
+      image-rendering: pixelated;
+      width: 52px;
+      height: 91px;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 34px;
+    }
+
+    /* 로그인 레트로 스타일 강화 */
+    .login-label {
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif !important;
+      font-size: 26px !important;
+      font-weight: 800 !important;
+      color: #2a2a5a !important;
+      letter-spacing: 1px;
+      margin-bottom: 14px !important;
+      display: flex !important;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.2;
+    }
+
+    .login-label::before {
+      content: '▶';
+      font-size: 9px;
+      color: #7878aa;
+    }
+
+    /* 깜빡이는 커서 효과 */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .retro-input::placeholder {
+      color: transparent;
+    }
+
+    .stat-label {
+      font-size: 7px !important;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif !important;
+      font-weight: 800 !important;
+      color: #333 !important;
+      width: 36px !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div style="display:flex; flex-direction:column; align-items:center;">
+    <div class="monitor">
+      <div class="screen">
+        <div class="main-window">
+
+          <!-- 타이틀바 -->
+          <div class="title-bar">
+            <span class="title-bar-text">42월드</span>
+            <div class="window-controls">
+              <div class="win-btn">_</div>
+              <div class="win-btn">□</div>
+              <div class="win-btn">✕</div>
+            </div>
+          </div>
+
+          <!-- 창 본문 -->
+          <div class="window-body">
+
+            <!-- 미니미 홈 -->
+            <div class="minimi-panel">
+              <div class="minimi-window">
+                <div class="minimi-title-bar">
+                  <span class="minimi-title-text">미니미 홈</span>
+                  <div class="minimi-controls">
+                    <div class="minimi-btn">_</div>
+                    <div class="minimi-btn">□</div>
+                    <div class="minimi-btn">✕</div>
+                  </div>
+                </div>
+                <div class="minimi-room">
+                  <div class="wallpaper"></div>
+
+                  <!-- 분필 통 -->
+                  <svg style="position:absolute;bottom:34px;right:6px;image-rendering:pixelated;" width="12" height="14" viewBox="0 0 6 7">
+                    <rect x="1" y="0" width="4" height="6" fill="#e8e8d0" stroke="#a0a080" stroke-width="0.5"/>
+                    <rect x="1" y="0" width="4" height="1" fill="#c8c8a8"/>
+                    <rect x="2" y="1" width="1" height="4" fill="#f0f0e0"/>
+                    <rect x="4" y="1" width="1" height="4" fill="#d0d0b8"/>
+                    <rect x="0" y="6" width="6" height="1" fill="#c8a060"/>
+                  </svg>
+
+                  <!-- 픽셀 캐릭터 SVG (세밀한 픽셀, viewBox 32x56) -->
+                  <svg class="pixel-girl" viewBox="0 0 32 56" xmlns="http://www.w3.org/2000/svg">
+                    <!-- === 머리카락 === -->
+                    <rect x="10" y="0"  width="12" height="2" fill="#1a0e04"/>
+                    <rect x="8"  y="2"  width="16" height="2" fill="#1a0e04"/>
+                    <rect x="8"  y="4"  width="16" height="4" fill="#2e1c0a"/>
+                    <!-- 양 옆머리 -->
+                    <rect x="7"  y="6"  width="2"  height="10" fill="#1a0e04"/>
+                    <rect x="23" y="6"  width="2"  height="10" fill="#1a0e04"/>
+                    <!-- 앞머리 -->
+                    <rect x="9"  y="6"  width="3"  height="2" fill="#2e1c0a"/>
+                    <rect x="20" y="6"  width="3"  height="2" fill="#2e1c0a"/>
+                    <!-- 뒷머리 아래 -->
+                    <rect x="8"  y="16" width="3"  height="2" fill="#1a0e04"/>
+                    <rect x="21" y="16" width="3"  height="2" fill="#1a0e04"/>
+
+                    <!-- === 얼굴 === -->
+                    <rect x="9"  y="6"  width="14" height="12" fill="#f5d0a8"/>
+                    <!-- 볼터치 -->
+                    <rect x="9"  y="12" width="3"  height="2" fill="#f0a898" opacity="0.5"/>
+                    <rect x="20" y="12" width="3"  height="2" fill="#f0a898" opacity="0.5"/>
+                    <!-- 눈썹 -->
+                    <rect x="11" y="8"  width="4"  height="1" fill="#2e1c0a"/>
+                    <rect x="17" y="8"  width="4"  height="1" fill="#2e1c0a"/>
+                    <!-- 눈 흰자 -->
+                    <rect x="11" y="9"  width="4"  height="3" fill="#f8f8f8"/>
+                    <rect x="17" y="9"  width="4"  height="3" fill="#f8f8f8"/>
+                    <!-- 눈동자 -->
+                    <rect x="12" y="10" width="2"  height="2" fill="#3a2060"/>
+                    <rect x="18" y="10" width="2"  height="2" fill="#3a2060"/>
+                    <!-- 눈 하이라이트 -->
+                    <rect x="13" y="10" width="1"  height="1" fill="#ffffff"/>
+                    <rect x="19" y="10" width="1"  height="1" fill="#ffffff"/>
+                    <!-- 코 -->
+                    <rect x="15" y="13" width="2"  height="1" fill="#d8a080" opacity="0.7"/>
+                    <!-- 입 -->
+                    <rect x="13" y="15" width="2"  height="1" fill="#e88070"/>
+                    <rect x="15" y="16" width="2"  height="1" fill="#c86050"/>
+                    <rect x="17" y="15" width="2"  height="1" fill="#e88070"/>
+
+                    <!-- === 목 === -->
+                    <rect x="14" y="18" width="4"  height="2" fill="#f5d0a8"/>
+
+                    <!-- === 교복 상의 === -->
+                    <rect x="10" y="20" width="12" height="14" fill="#d8d8f8"/>
+                    <!-- 옷깃 왼쪽 -->
+                    <rect x="10" y="20" width="6"  height="6" fill="#b8b8e8"/>
+                    <rect x="10" y="20" width="4"  height="4" fill="#c8c8f0"/>
+                    <!-- 옷깃 오른쪽 -->
+                    <rect x="16" y="20" width="6"  height="6" fill="#b8b8e8"/>
+                    <rect x="18" y="20" width="4"  height="4" fill="#c8c8f0"/>
+                    <!-- 넥타이 -->
+                    <rect x="14" y="20" width="4"  height="8" fill="#e8f0ff"/>
+                    <rect x="15" y="22" width="2"  height="6" fill="#d0d8f8"/>
+                    <!-- 단추 -->
+                    <rect x="15" y="24" width="2"  height="2" fill="#9090c0"/>
+                    <rect x="15" y="28" width="2"  height="2" fill="#9090c0"/>
+                    <!-- 팔 왼쪽 -->
+                    <rect x="6"  y="20" width="4"  height="10" fill="#d8d8f8"/>
+                    <rect x="7"  y="20" width="2"  height="2"  fill="#b8b8e8"/>
+                    <rect x="6"  y="30" width="4"  height="4"  fill="#f5d0a8"/>
+                    <!-- 팔 오른쪽 -->
+                    <rect x="22" y="20" width="4"  height="10" fill="#d8d8f8"/>
+                    <rect x="23" y="20" width="2"  height="2"  fill="#b8b8e8"/>
+                    <rect x="22" y="30" width="4"  height="4"  fill="#f5d0a8"/>
+
+                    <!-- === 치마 === -->
+                    <rect x="9"  y="34" width="14" height="2"  fill="#9898d8"/>
+                    <rect x="9"  y="36" width="14" height="8"  fill="#8080c8"/>
+                    <!-- 치마 주름 -->
+                    <rect x="10" y="36" width="2"  height="8"  fill="#9090d0" opacity="0.5"/>
+                    <rect x="14" y="36" width="2"  height="8"  fill="#9090d0" opacity="0.5"/>
+                    <rect x="18" y="36" width="2"  height="8"  fill="#9090d0" opacity="0.5"/>
+                    <rect x="21" y="36" width="1"  height="8"  fill="#6868b0" opacity="0.4"/>
+
+                    <!-- === 양말 === -->
+                    <rect x="10" y="44" width="5"  height="4"  fill="#f0f0ff"/>
+                    <rect x="17" y="44" width="5"  height="4"  fill="#f0f0ff"/>
+                    <rect x="10" y="44" width="5"  height="1"  fill="#d8d8f0"/>
+                    <rect x="17" y="44" width="5"  height="1"  fill="#d8d8f0"/>
+
+                    <!-- === 신발 === -->
+                    <rect x="9"  y="48" width="7"  height="4"  fill="#1a0e04"/>
+                    <rect x="16" y="48" width="7"  height="4"  fill="#1a0e04"/>
+                    <rect x="9"  y="48" width="2"  height="2"  fill="#2e1c0a"/>
+                    <rect x="16" y="48" width="2"  height="2"  fill="#2e1c0a"/>
+                    <rect x="15" y="49" width="1"  height="2"  fill="#3a2a18"/>
+                    <rect x="22" y="49" width="1"  height="2"  fill="#3a2a18"/>
+                  </svg>
+                </div>
+                <div class="minimi-stats">
+                  <div class="stat-row">
+                    <span class="stat-label">VISIT</span>
+                    <div class="stat-bar"><div class="stat-bar-fill" style="width:70%"></div></div>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label">TODAY</span>
+                    <div class="stat-bar"><div class="stat-bar-fill" style="width:40%"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 로그인 패널 -->
+            <div class="login-panel">
+              <span class="login-label">일촌 번호를 입력하세요</span>
+              <div class="input-row">
+                <div class="input-group">
+                  <input type="text" class="retro-input" placeholder="번호 입력..." maxlength="10" id="code1">
+                </div>
+                <button class="wave-btn" onclick="login()">파도타기</button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 교사 전용 버튼 -->
+          <div class="teacher-btn-wrap">
+            <button class="teacher-btn" onclick="teacherLogin()">
+              <svg width="18" height="18" viewBox="0 0 18 18" style="image-rendering:pixelated">
+                <rect x="2" y="2" width="14" height="11" fill="#4848a0" rx="1"/>
+                <rect x="4" y="4" width="10" height="7" fill="#c8c8f0"/>
+                <rect x="6" y="13" width="6" height="3" fill="#4848a0"/>
+                <rect x="4" y="15" width="10" height="2" fill="#333"/>
+              </svg>
+              교사 전용
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="monitor-stand"></div>
+    <div class="monitor-base"></div>
+  </div>
+
+  <!-- 교사 비밀번호 모달 -->
+  <div id="pw-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:999;">
+    <div style="background:#c8c8e0;border:3px solid #888;box-shadow:inset -2px -2px 0 #666,inset 2px 2px 0 #eeeef8;min-width:260px;">
+      <div style="background:linear-gradient(to right,#7878aa,#a8a8cc);padding:4px 6px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:12px;font-weight:800;color:white;letter-spacing:1px;">교사 전용 로그인</span>
+        <div onclick="teacherPwCancel()" style="width:14px;height:12px;background:#c8c8d8;border:2px solid;border-color:#eee #888 #888 #eee;font-size:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;">✕</div>
+      </div>
+      <div style="padding:18px 20px 16px;">
+        <div style="font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:13px;font-weight:800;color:#2a2a5a;margin-bottom:10px;">비밀번호를 입력하세요</div>
+        <input id="teacher-pw" type="password" maxlength="10"
+          style="width:100%;height:28px;background:#fffff8;border:2px solid;border-color:#888 #eee #eee #888;padding:2px 8px;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:15px;font-weight:700;outline:none;color:#333;letter-spacing:6px;box-shadow:inset 2px 2px 4px rgba(0,0,0,0.15);">
+        <div id="pw-error" style="display:none;margin-top:6px;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:11px;font-weight:700;color:#cc2222;">비밀번호가 틀렸습니다.</div>
+        <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end;">
+          <button onclick="teacherPwConfirm()" style="background:linear-gradient(180deg,#f07830,#d05818);border:2px solid;border-color:#f8b060 #882800 #882800 #f8b060;color:white;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:12px;font-weight:800;padding:4px 16px;cursor:pointer;letter-spacing:1px;">확인</button>
+          <button onclick="teacherPwCancel()" style="background:#c8c8d8;border:2px solid;border-color:#eee #888 #888 #eee;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:12px;font-weight:700;padding:4px 16px;cursor:pointer;">취소</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbx_gr2iDmweHonevtE0j9eAIuWUqprshP3K63Vh0DVFAe-J0az3J5W9chf4vizqs6tUtQ/exec';
+
+    function login() {
+      const code1 = document.getElementById('code1').value;
+      if (!code1) {
+        alert('일촌 번호를 입력하세요!');
+        return;
+      }
+      // 로딩 표시
+      const btn = document.querySelector('.wave-btn');
+      const origText = btn.textContent;
+      btn.textContent = '접속 중...';
+      btn.disabled = true;
+
+      fetch(API_URL + '?action=login&code=' + encodeURIComponent(code1))
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            // 학생 정보 저장
+            sessionStorage.setItem('student', JSON.stringify(data.student));
+            window.location.href = 'student.html';
+          } else {
+            alert(data.error || '일촌 번호를 찾을 수 없습니다.');
+            btn.textContent = origText;
+            btn.disabled = false;
+          }
+        })
+        .catch(err => {
+          alert('서버 연결 실패! 인터넷을 확인해주세요.');
+          btn.textContent = origText;
+          btn.disabled = false;
+        });
+    }
+
+    function teacherLogin() {
+      document.getElementById('pw-modal').style.display = 'flex';
+      document.getElementById('teacher-pw').value = '';
+      setTimeout(() => document.getElementById('teacher-pw').focus(), 50);
+    }
+    function teacherPwConfirm() {
+      const pw = document.getElementById('teacher-pw').value;
+      if (pw === '0130') {
+        window.location.href = 'teacher.html';
+      } else {
+        document.getElementById('pw-error').style.display = 'block';
+        document.getElementById('teacher-pw').value = '';
+        document.getElementById('teacher-pw').focus();
+      }
+    }
+    function teacherPwCancel() {
+      document.getElementById('pw-modal').style.display = 'none';
+    }
+    document.addEventListener('keydown', function(e) {
+      if (document.getElementById('pw-modal').style.display === 'flex') {
+        if (e.key === 'Enter') teacherPwConfirm();
+        if (e.key === 'Escape') teacherPwCancel();
+      }
+    });
+
+    // 엔터키 로그인 (모달 닫혀있을 때만)
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && document.getElementById('pw-modal').style.display !== 'flex') login();
+    });
+  </script>
+
+</body>
+</html>
