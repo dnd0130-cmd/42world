@@ -220,6 +220,7 @@
 
     /* 최근 내역 */
     .history-area { width: 130px; flex-shrink: 0; }
+    #history-list { max-height: 160px; overflow-y: auto; }
 
     .history-title {
       font-size: 10px; font-weight: 800; color: #333; margin-bottom: 5px; text-align: center;
@@ -491,8 +492,8 @@
                 </select>
               </div>
               <div class="quick-row" style="gap:4px;">
-                <button id="btn-give" onclick="setGiveType('give')" style="flex:1;height:26px;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:11px;font-weight:800;border:2px solid;border-color:#44aa44 #115511 #115511 #44aa44;background:#228822;color:white;cursor:pointer;">＋ 지급</button>
-                <button id="btn-take" onclick="setGiveType('take')" style="flex:1;height:26px;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:11px;font-weight:800;border:2px solid;border-color:#888 #eee #eee #888;background:#c8c8d8;color:#333;cursor:pointer;">－ 차감</button>
+                <button id="btn-give" onclick="setGiveType('give'); runQuickGive();" style="flex:1;height:26px;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:11px;font-weight:800;border:2px solid;border-color:#44aa44 #115511 #115511 #44aa44;background:#228822;color:white;cursor:pointer;">＋ 지급</button>
+                <button id="btn-take" onclick="setGiveType('take'); runQuickGive();" style="flex:1;height:26px;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:11px;font-weight:800;border:2px solid;border-color:#888 #eee #eee #888;background:#c8c8d8;color:#333;cursor:pointer;">－ 차감</button>
                 <input type="hidden" id="give-type" value="give">
               </div>
               <div class="quick-row">
@@ -529,6 +530,8 @@
                 <button class="bulk-btn" onclick="window.location.href='teacher-shop.html'" style="font-size:12px;letter-spacing:0;height:36px;background:linear-gradient(180deg,#a040e0,#7020b0);border-color:#c070ff #4010a0 #4010a0 #c070ff;box-shadow:2px 2px 0 #200860;">🛒 상점 관리</button>
                 <button class="bulk-btn" onclick="openGuestbookModal()" style="font-size:12px;letter-spacing:0;height:36px;background:linear-gradient(180deg,#40a060,#207040);border-color:#70d090 #104030 #104030 #70d090;box-shadow:2px 2px 0 #082018;">📖 방명록</button>
                 <button class="bulk-btn" onclick="openDiaryModal()" style="font-size:12px;letter-spacing:0;height:36px;background:linear-gradient(180deg,#e07830,#b05010);border-color:#f0a060 #703000 #703000 #f0a060;box-shadow:2px 2px 0 #401800;">📔 일기 조회</button>
+                <button class="bulk-btn" onclick="openVoucherApproveModal()" id="voucher-btn" style="font-size:12px;letter-spacing:0;height:36px;background:linear-gradient(180deg,#c0a020,#907000);border-color:#f0d050 #504000 #504000 #f0d050;box-shadow:2px 2px 0 #302000;">🎫 이용권 승인</button>
+                <button class="bulk-btn" onclick="openPurchaseHistoryModal()" style="font-size:12px;letter-spacing:0;height:36px;background:linear-gradient(180deg,#2080c0,#105090);border-color:#60b0f0 #082050 #082050 #60b0f0;box-shadow:2px 2px 0 #041030;">🛍️ 구매 내역</button>
               </div>
             </div>
           </div>
@@ -559,6 +562,46 @@
       <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end;">
         <button onclick="submitTeacherGuestbook()" style="background:linear-gradient(180deg,#f07830,#d05818);border:2px solid;border-color:#f8b060 #882800 #882800 #f8b060;color:white;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:12px;font-weight:800;padding:4px 16px;cursor:pointer;">작성</button>
         <button onclick="closeGuestbookModal()" style="background:#c8c8d8;border:2px solid;border-color:#eee #888 #888 #eee;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:12px;font-weight:700;padding:4px 16px;cursor:pointer;">취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 이용권 승인 모달 -->
+<div class="modal-overlay" id="voucher-approve-modal" style="display:none;">
+  <div class="modal-box" style="min-width:360px;max-width:480px;width:90%;">
+    <div class="panel-title-bar">
+      <span class="panel-title">🎫 이용권 사용 승인</span>
+      <div class="panel-controls"><div class="panel-btn" onclick="closeVoucherApproveModal()">✕</div></div>
+    </div>
+    <div style="padding:12px;background:#fffff8;">
+      <div id="pending-voucher-list" style="max-height:320px;overflow-y:auto;"></div>
+      <div style="margin-top:8px;text-align:right;">
+        <button onclick="closeVoucherApproveModal()" style="padding:4px 14px;background:#888;color:#fff;border:2px solid #666;font-size:11px;font-weight:700;cursor:pointer;">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 구매 내역 모달 -->
+<div class="modal-overlay" id="purchase-history-modal" style="display:none;">
+  <div class="modal-box" style="min-width:360px;max-width:480px;width:90%;">
+    <div class="panel-title-bar">
+      <span class="panel-title">🛍️ 학생별 구매 내역</span>
+      <div class="panel-controls"><div class="panel-btn" onclick="closePurchaseHistoryModal()">✕</div></div>
+    </div>
+    <div style="padding:12px;background:#fffff8;">
+      <div style="display:flex;gap:6px;margin-bottom:10px;">
+        <select id="purchase-target" style="flex:1;height:28px;background:#fffff8;border:2px solid;border-color:#888 #eee #eee #888;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:12px;font-weight:700;padding:0 4px;outline:none;">
+          <option value="">-- 학생 선택 --</option>
+        </select>
+        <button onclick="loadPurchaseHistory()" style="padding:0 10px;height:28px;background:#2060a0;color:#fff;border:2px solid;border-color:#60a0e0 #082060 #082060 #60a0e0;font-family:'Nanum Gothic',sans-serif;font-size:11px;font-weight:700;cursor:pointer;">조회</button>
+      </div>
+      <div id="purchase-history-list" style="max-height:300px;overflow-y:auto;background:#f8f8f0;border:2px solid #ccc;padding:6px;">
+        <div style="text-align:center;color:#aaa;font-size:11px;padding:16px;">학생을 선택하고 조회 버튼을 눌러주세요.</div>
+      </div>
+      <div style="margin-top:8px;text-align:right;">
+        <button onclick="closePurchaseHistoryModal()" style="padding:4px 14px;background:#888;color:#fff;border:2px solid #666;font-size:11px;font-weight:700;cursor:pointer;">닫기</button>
       </div>
     </div>
   </div>
@@ -618,6 +661,23 @@
   async function init() {
     await Promise.all([loadStudents(), loadLog()]);
     renderChart();
+    checkPendingVouchers();
+  }
+
+  function checkPendingVouchers() {
+    fetch(API_URL + '?action=getPendingVouchers')
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.vouchers.length > 0) {
+          const btn = document.getElementById('voucher-btn');
+          if (btn) {
+            btn.style.background = 'linear-gradient(180deg,#e04040,#b02020)';
+            btn.style.borderColor = '#ff8080 #601010 #601010 #ff8080';
+            btn.textContent = '🎫 이용권 승인 (' + data.vouchers.length + ')';
+          }
+        }
+      })
+      .catch(() => {});
   }
 
   async function loadStudents() {
@@ -646,6 +706,7 @@
       const data = await res.json();
       if (data.success) {
         historyData = data.log.slice(0, 8).map(l => ({
+          rowNum: l.rowNum,
           name: l.이름 || l.name || '',
           amount: Number(l.변화량 || l.amount) || 0,
           label: l.사유 || l.reason || l.label || ''
@@ -761,17 +822,39 @@
   function renderHistory() {
     const list = document.getElementById('history-list');
     list.innerHTML = historyData.map(h => `
-      <div class="history-item">
-        <span class="h-name">${h.name} ${h.label}</span>
-        <span class="${h.amount > 0 ? 'h-plus' : 'h-minus'}">${h.amount > 0 ? '+' : ''}${h.amount}개</span>
+      <div class="history-item" style="display:flex;align-items:center;justify-content:space-between;gap:4px;">
+        <span class="h-name" style="flex:1;font-size:10px;">${h.name} ${h.label}</span>
+        <span class="${h.amount > 0 ? 'h-plus' : 'h-minus'}" style="font-size:10px;">${h.amount > 0 ? '+' : ''}${h.amount}개</span>
+        ${!h.label.startsWith('취소:') ? `<button onclick="cancelAcornLog(${h.rowNum},'${h.name}','${h.label}')" style="font-size:9px;padding:1px 4px;background:#cc4444;color:#fff;border:1px solid #882222;cursor:pointer;font-family:'Nanum Gothic',sans-serif;">취소</button>` : '<span style="font-size:9px;color:#aaa;">취소됨</span>'}
       </div>
     `).join('');
+  }
+
+  async function cancelAcornLog(rowNum, name, label) {
+    if (!confirm(name + '의 [' + label + '] 내역을 취소하시겠어요?\n도토리가 반대로 적용됩니다.')) return;
+    try {
+      const res = await fetch(`${API_URL}?action=cancelAcorn&rowNum=${rowNum}`);
+      const data = await res.json();
+      showAlert(data.success ? '취소 완료' : '오류', data.success ? data.message : data.error);
+      if (data.success) { await Promise.all([loadStudents(), loadLog()]); renderChart(); }
+    } catch(e) { showAlert('오류', '서버 연결 실패'); }
   }
 
   // ── 전체 총합 업데이트 ──
   function updateTotal() {
     const total = students.reduce((sum, s) => sum + s.acorn, 0);
     document.getElementById('total-count').textContent = '총 ' + total.toLocaleString() + '개';
+  }
+
+  // ── 지급/차감 버튼에서 직접 실행 ──
+  async function runQuickGive() {
+    if (students.length === 0) {
+      showAlert('오류', '학생 데이터가 없습니다. 페이지를 새로고침해주세요.');
+      return;
+    }
+    const reason = document.getElementById('custom-reason').value.trim() || '도토리 지급/차감';
+    const amount = parseInt(document.getElementById('give-amount').value) || 10;
+    await quickGive(amount, reason);
   }
 
   // ── 빠른 지급 (행동버튼용, 개별/전체 자동 판단) ──
@@ -781,19 +864,26 @@
     const targetId = document.getElementById('give-target').value;
     const delta = type === 'give' ? amount : -amount;
 
-    const targets = targetId === '__all__' ? students : [students.find(x => x.id === targetId)];
-    if (!targets[0]) return;
+    console.log('[quickGive]', { amount, type, targetId, delta, label, studentsCount: students.length });
+
+    const targets = targetId === '__all__' ? students : [students.find(x => String(x.id) === String(targetId))];
+    if (!targets[0]) {
+      showAlert('알림', '학생 목록을 불러오지 못했습니다. 페이지를 새로고침 해주세요.');
+      return;
+    }
 
     try {
-      await Promise.all(targets.map(s =>
+      const results = await Promise.all(targets.map(s =>
         fetch(`${API_URL}?action=giveAcorn&code=${encodeURIComponent(s.id)}&amount=${delta}&reason=${encodeURIComponent(label)}`)
           .then(r => r.json())
       ));
+      console.log('[quickGive] 결과:', results);
       await Promise.all([loadStudents(), loadLog()]);
       const who = targetId === '__all__' ? '전체 학생' : targets[0].name;
       showAlert('완료', `${who}에게 [${label}] ${Math.abs(delta)}개를 ${delta > 0 ? '지급' : '차감'}했습니다.`);
     } catch(e) {
-      showAlert('오류', '서버 연결 실패!');
+      console.error('[quickGive] 오류:', e);
+      showAlert('오류', '서버 연결 실패! (' + e.message + ')');
     }
   }
 
@@ -906,6 +996,102 @@
     document.getElementById('diary-modal').style.display = 'none';
   }
 
+  function openVoucherApproveModal() {
+    document.getElementById('voucher-approve-modal').style.display = 'flex';
+    loadPendingVouchers();
+  }
+  function closeVoucherApproveModal() {
+    document.getElementById('voucher-approve-modal').style.display = 'none';
+  }
+  function loadPendingVouchers() {
+    const div = document.getElementById('pending-voucher-list');
+    div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:12px;">불러오는 중...</div>';
+    fetch(API_URL + '?action=getPendingVouchers')
+      .then(r => r.json())
+      .then(data => {
+        if (!data.success || data.vouchers.length === 0) {
+          div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:16px;">승인 대기 중인 이용권이 없어요 ✅</div>';
+          document.getElementById('voucher-btn').style.background = 'linear-gradient(180deg,#c0a020,#907000)';
+          return;
+        }
+        document.getElementById('voucher-btn').style.background = 'linear-gradient(180deg,#e04040,#b02020)';
+        div.innerHTML = '';
+        data.vouchers.forEach(v => {
+          div.innerHTML += `
+            <div style="background:#fffde8;border:2px solid #ccaa00;padding:8px;margin-bottom:6px;border-radius:2px;">
+              <div style="font-weight:bold;font-size:12px;">🎫 ${v.품목}</div>
+              <div style="font-size:10px;color:#555;margin-top:2px;">학생: ${v.이름} (${v.학번})</div>
+              <div style="font-size:10px;color:#888;">신청일: ${new Date(v.신청일).toLocaleString()}</div>
+              <div style="display:flex;gap:6px;margin-top:6px;">
+                <button onclick="approveVoucher('${v.id}', '${v.이름}', '${v.품목}')"
+                  style="padding:4px 12px;background:#2a7a2a;color:#fff;border:2px solid #1a5a1a;font-size:10px;font-weight:700;cursor:pointer;">
+                  ✅ 승인
+                </button>
+                <button onclick="rejectVoucher('${v.id}', '${v.이름}', '${v.품목}')"
+                  style="padding:4px 12px;background:#aa2222;color:#fff;border:2px solid #881111;font-size:10px;font-weight:700;cursor:pointer;">
+                  ❌ 거절
+                </button>
+              </div>
+            </div>`;
+        });
+      })
+      .catch(() => { div.innerHTML = '<div style="color:#cc2222;font-size:11px;padding:8px;">불러오기 실패</div>'; });
+  }
+  function approveVoucher(id, name, item) {
+    if (!confirm(name + '의 [' + item + '] 이용권을 승인하시겠어요?')) return;
+    fetch(`${API_URL}?action=approveVoucher&id=${encodeURIComponent(id)}`)
+      .then(r => r.json())
+      .then(data => {
+        showAlert(data.success ? '승인 완료' : '오류', data.success ? data.message : (data.error || '실패!'));
+        if (data.success) loadPendingVouchers();
+      })
+      .catch(() => showAlert('오류', '서버 연결 실패!'));
+  }
+
+  function rejectVoucher(id, name, item) {
+    if (!confirm(name + '의 [' + item + '] 이용권 신청을 거절하시겠어요?')) return;
+    fetch(`${API_URL}?action=rejectVoucher&id=${encodeURIComponent(id)}`)
+      .then(r => r.json())
+      .then(data => {
+        showAlert(data.success ? '거절 완료' : '오류', data.success ? data.message : (data.error || '실패!'));
+        if (data.success) loadPendingVouchers();
+      })
+      .catch(() => showAlert('오류', '서버 연결 실패!'));
+  }
+
+  function openPurchaseHistoryModal() {
+    document.getElementById('purchase-history-modal').style.display = 'flex';
+    const sel = document.getElementById('purchase-target');
+    sel.innerHTML = '<option value="">-- 학생 선택 --</option>';
+    students.forEach(s => {
+      sel.innerHTML += `<option value="${s.id}">${s.name} (${s.id})</option>`;
+    });
+  }
+  function closePurchaseHistoryModal() {
+    document.getElementById('purchase-history-modal').style.display = 'none';
+  }
+  async function loadPurchaseHistory() {
+    const code = document.getElementById('purchase-target').value;
+    if (!code) { showAlert('알림', '학생을 선택하세요.'); return; }
+    const div = document.getElementById('purchase-history-list');
+    div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:16px;">불러오는 중...</div>';
+    try {
+      const res = await fetch(`${API_URL}?action=getPurchaseHistory&code=${encodeURIComponent(code)}`);
+      const data = await res.json();
+      if (!data.success) { div.innerHTML = '<div style="color:#cc2222;font-size:11px;padding:8px;">' + data.error + '</div>'; return; }
+      if (data.history.length === 0) {
+        div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:16px;">' + data.이름 + ' 학생의 구매 내역이 없어요.</div>';
+        return;
+      }
+      div.innerHTML = data.history.map(h => `
+        <div style="display:flex;justify-content:space-between;padding:5px 4px;border-bottom:1px solid #ddd;font-size:11px;">
+          <span style="color:#333;font-weight:700;">🛍️ ${h.품목}</span>
+          <span style="color:#cc2222;font-weight:800;">${h.도토리}개</span>
+          <span style="color:#888;">${new Date(h.날짜).toLocaleDateString()}</span>
+        </div>`).join('');
+    } catch(e) { div.innerHTML = '<div style="color:#cc2222;font-size:11px;padding:8px;">서버 연결 실패</div>'; }
+  }
+
   async function loadDiaries() {
     const code = document.getElementById('diary-target').value;
     if (!code) { showAlert('알림', '학생을 선택하세요.'); return; }
@@ -917,7 +1103,7 @@
       if (!data.success) { resultsEl.innerHTML = `<div style="padding:16px;font-size:11px;color:#cc2222;font-weight:700;">오류: ${data.error || '불러오기 실패'}</div>`; return; }
       const all = data.diaries || [];
       // 선택한 학생 코드로 필터링
-      const entries = all.filter(e => (e.학번 || '') === code);
+      const entries = all.filter(e => (e.학번 || e.고유코드 || e.code || '') === code);
       const emojiMap = { '행복':'😊', '신남':'🤩', '평범':'😐', '피곤':'😴', '슬픔':'😢', '화남':'😤' };
       if (entries.length === 0) {
         resultsEl.innerHTML = '<div style="padding:20px;text-align:center;font-size:11px;color:#888;font-weight:700;">아직 작성한 다이어리가 없어요.</div>';
