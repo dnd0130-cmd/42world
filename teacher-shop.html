@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>42월드 상점 관리소</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 100vw; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background: #c8c8d8;
+      background-image:
+        linear-gradient(rgba(150,150,180,0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(150,150,180,0.3) 1px, transparent 1px);
+      background-size: 20px 20px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      image-rendering: pixelated;
+      padding: 20px;
+    }
+
+    .monitor {
+      width: 860px;
+      background: #d0d0d8;
+      border-radius: 20px 20px 40px 40px;
+      padding: 24px 36px 56px 36px;
+      border: 4px solid #888899;
+      box-shadow:
+        inset 0 0 30px rgba(0,0,0,0.2),
+        4px 4px 0 #888, 8px 8px 0 #666,
+        0 0 0 8px #b8b8c8, 0 0 0 12px #888899;
+    }
+
+    .screen {
+      background: #b8b8cc;
+      border-radius: 8px; padding: 14px;
+      border: 3px inset #888;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .monitor-stand {
+      width: 120px; height: 20px; background: #b0b0c0;
+      margin: 0 auto; border-radius: 0 0 4px 4px;
+      border: 3px solid #888899; border-top: none;
+    }
+    .monitor-base {
+      width: 200px; height: 12px; background: #a8a8b8;
+      margin: 0 auto; border-radius: 2px;
+      border: 3px solid #888899; border-top: none;
+    }
+
+    /* 페이지 타이틀 */
+    .page-title {
+      font-size: 30px; font-weight: 800; color: #f8e84a;
+      text-shadow: 2px 2px 0 #8a6800, 3px 3px 0 #5a4400;
+      letter-spacing: 6px; text-align: center; margin-bottom: 10px;
+    }
+
+    /* 메인 윈도우 */
+    .main-window {
+      background: #c8c8e0;
+      border: 3px solid #888;
+      box-shadow: inset -2px -2px 0 #666, inset 2px 2px 0 #eeeef8;
+    }
+
+    .title-bar {
+      background: linear-gradient(to right, #7878aa, #a8a8cc);
+      padding: 4px 6px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .title-bar-text { font-size: 12px; font-weight: 800; color: white; letter-spacing: 2px; }
+    .win-btns { display: flex; gap: 3px; }
+    .win-btn {
+      width: 16px; height: 14px; background: #c8c8d8;
+      border: 2px solid; border-color: #eee #888 #888 #eee;
+      font-size: 8px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-family: monospace; color: #333;
+    }
+
+    /* 3열 레이아웃 */
+    .dashboard { display: flex; gap: 10px; padding: 10px; }
+
+    /* 공통 패널 */
+    .panel {
+      background: #c8c8e0;
+      border: 2px solid #888;
+      box-shadow: inset -1px -1px 0 #666, inset 1px 1px 0 #eee;
+    }
+
+    .panel-title-bar {
+      background: linear-gradient(to right, #8888cc, #b0b0e0);
+      padding: 3px 5px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .panel-title { font-size: 11px; font-weight: 800; color: white; letter-spacing: 1px; }
+    .panel-btns { display: flex; gap: 2px; }
+    .panel-btn {
+      width: 12px; height: 11px; background: #c8c8d8;
+      border: 1px solid; border-color: #eee #888 #888 #eee;
+      font-size: 7px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+
+    /* ── 상품 목록 패널 ── */
+    .list-panel { flex: 1; }
+
+    .item-list {
+      height: 320px; overflow-y: auto;
+      background: white;
+      border: 2px solid; border-color: #888 #eee #eee #888;
+      margin: 8px;
+    }
+
+    .item-list::-webkit-scrollbar { width: 14px; }
+    .item-list::-webkit-scrollbar-track { background: #c8c8d8; border-left: 1px solid #888; }
+    .item-list::-webkit-scrollbar-thumb {
+      background: #a0a0c0; border: 2px solid; border-color: #eee #888 #888 #eee;
+    }
+
+    .item-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 8px; border-bottom: 1px solid #ddd;
+    }
+
+    .item-row-icon {
+      width: 36px; height: 36px;
+      background: #f8f4e8;
+      border: 1px solid #ccc;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; image-rendering: pixelated;
+      font-size: 20px;
+    }
+
+    .item-row-info { flex: 1; }
+    .item-row-name { font-size: 12px; font-weight: 800; color: #2a2a5a; }
+    .item-row-sub { font-size: 10px; color: #666; font-weight: 700; }
+
+    .item-row-btns { display: flex; gap: 5px; flex-shrink: 0; }
+
+    .edit-btn, .del-btn {
+      height: 26px; padding: 0 8px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 11px; font-weight: 800;
+      border: 2px solid; cursor: pointer;
+    }
+    .edit-btn {
+      background: #5858a0; color: white;
+      border-color: #8080c8 #303080 #303080 #8080c8;
+    }
+    .del-btn {
+      background: #cc2222; color: white;
+      border-color: #ee4444 #881111 #881111 #ee4444;
+    }
+
+    /* ── 등록 패널 ── */
+    .form-panel { width: 220px; flex-shrink: 0; }
+
+    .form-body { padding: 10px; }
+
+    .form-row {
+      margin-bottom: 8px;
+    }
+    .form-label {
+      font-size: 11px; font-weight: 800; color: #333;
+      display: block; margin-bottom: 3px;
+    }
+    .form-input, .form-textarea {
+      width: 100%;
+      background: #fffff8;
+      border: 2px solid; border-color: #888 #eee #eee #888;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 12px; font-weight: 700;
+      padding: 3px 6px; outline: none; color: #333;
+      box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
+    }
+    .form-input { height: 28px; }
+    .form-textarea { height: 60px; resize: none; }
+
+    .register-btn {
+      width: 100%; height: 38px;
+      background: linear-gradient(180deg, #4090f0 0%, #2060c8 100%);
+      border: 3px solid; border-color: #70b8ff #1040a0 #1040a0 #70b8ff;
+      color: white; font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 14px; font-weight: 800; cursor: pointer;
+      letter-spacing: 2px; text-shadow: 1px 1px 0 #1040a0;
+      box-shadow: 2px 2px 0 #082080; margin-top: 4px;
+    }
+    .register-btn:hover { background: #3080e0; }
+    .register-btn:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 #082080; }
+
+    /* ── 사이드바 ── */
+    .sidebar { width: 90px; flex-shrink: 0; display: flex; flex-direction: column; gap: 5px; }
+
+    .sidebar-btn {
+      background: linear-gradient(180deg, #a0a0d8 0%, #8080c0 100%);
+      border: 2px solid; border-color: #c0c0f0 #5050a0 #5050a0 #c0c0f0;
+      color: white; font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 12px; font-weight: 800;
+      padding: 8px 4px; cursor: pointer; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+      text-shadow: 1px 1px 0 #3030a0; box-shadow: 2px 2px 0 #303080;
+    }
+    .sidebar-btn:hover { background: #9090c8; }
+    .sidebar-btn:active {
+      transform: translate(1px,1px); box-shadow: 1px 1px 0 #303080;
+      border-color: #5050a0 #c0c0f0 #c0c0f0 #5050a0;
+    }
+
+    /* 모달 */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.45);
+      align-items: center; justify-content: center; z-index: 999;
+    }
+    .modal-box {
+      background: #c8c8e0; border: 3px solid #888;
+      box-shadow: inset -2px -2px 0 #666, inset 2px 2px 0 #eeeef8;
+      min-width: 280px;
+    }
+    .modal-title-bar {
+      background: linear-gradient(to right, #7878aa, #a8a8cc);
+      padding: 4px 6px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-title-text { font-size: 12px; font-weight: 800; color: white; }
+    .modal-body { padding: 16px 18px; }
+    .modal-msg { font-size: 13px; font-weight: 800; color: #2a2a5a; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="monitor">
+    <div class="screen">
+
+      <div class="page-title">42월드 상점 관리소</div>
+
+      <div class="main-window">
+        <div class="title-bar">
+          <span class="title-bar-text">교사용 상점 관리</span>
+          <div class="win-btns">
+            <div class="win-btn">_</div>
+            <div class="win-btn">□</div>
+            <div class="win-btn" onclick="window.location.href='teacher.html'">✕</div>
+          </div>
+        </div>
+
+        <div class="dashboard">
+
+          <!-- ① 상품 목록 -->
+          <div class="panel list-panel">
+            <div class="panel-title-bar">
+              <span class="panel-title">상품 목록 관리</span>
+              <div class="panel-btns">
+                <div class="panel-btn">_</div>
+                <div class="panel-btn">✕</div>
+              </div>
+            </div>
+            <div class="item-list" id="item-list">
+              <!-- JS 렌더링 -->
+            </div>
+          </div>
+
+          <!-- ② 새 상품 등록 -->
+          <div class="panel form-panel">
+            <div class="panel-title-bar">
+              <span class="panel-title">새 상품 등록</span>
+              <div class="panel-btns"><div class="panel-btn">✕</div></div>
+            </div>
+            <div class="form-body">
+              <div class="form-row">
+                <label class="form-label">아이템 이름</label>
+                <input type="text" class="form-input" id="f-name" placeholder="예: 황금 도토리">
+              </div>
+              <div class="form-row">
+                <label class="form-label">가격 (도토리)</label>
+                <input type="number" class="form-input" id="f-price" placeholder="50" min="1">
+              </div>
+              <div class="form-row">
+                <label class="form-label">수량 (재고, 빈칸=무제한)</label>
+                <input type="number" class="form-input" id="f-qty" placeholder="100">
+              </div>
+              <div class="form-row">
+                <label class="form-label">설명</label>
+                <textarea class="form-textarea" id="f-desc" placeholder="아이템 설명을 입력하세요"></textarea>
+              </div>
+              <button class="register-btn" onclick="registerItem()">상품 등록</button>
+            </div>
+          </div>
+
+          <!-- ③ 사이드바 -->
+          <div class="sidebar">
+            <button class="sidebar-btn" onclick="window.location.href='teacher.html'">
+              🏠 홈
+            </button>
+            <button class="sidebar-btn">
+              👤 프로필
+            </button>
+            <button class="sidebar-btn" style="background:linear-gradient(180deg,#f0a030,#d08020);border-color:#f8c060 #884000 #884000 #f8c060;text-shadow:1px 1px 0 #884000;box-shadow:2px 2px 0 #553000;">
+              ⭐ 레벨 뱃지 상점
+            </button>
+            <button class="sidebar-btn">
+              📝 방명록
+            </button>
+            <button class="sidebar-btn">
+              📔 다이어리
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="monitor-stand"></div>
+  <div class="monitor-base"></div>
+</div>
+
+<!-- 알림 모달 -->
+<div class="modal-overlay" id="alert-modal">
+  <div class="modal-box">
+    <div class="modal-title-bar">
+      <span class="modal-title-text" id="alert-title">알림</span>
+      <div class="win-btn" onclick="closeAlert()">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-msg" id="alert-msg"></div>
+      <div style="text-align:right;">
+        <button onclick="closeAlert()" style="background:#c8c8d8;border:2px solid;border-color:#eee #888 #888 #eee;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:12px;font-weight:700;padding:4px 18px;cursor:pointer;">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbx_gr2iDmweHonevtE0j9eAIuWUqprshP3K63Vh0DVFAe-J0az3J5W9chf4vizqs6tUtQ/exec';
+
+  // ── 초기화 ──
+  loadItems();
+
+  function loadItems() {
+    fetch(API_URL + '?action=getShop')
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) renderItems(data.items);
+        else showAlert('오류', data.error);
+      })
+      .catch(() => showAlert('오류', '서버 연결 실패!'));
+  }
+
+  function renderItems(items) {
+    const list = document.getElementById('item-list');
+    if (!items || items.length === 0) {
+      list.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#888;font-weight:800;">등록된 상품이 없습니다.</div>';
+      return;
+    }
+    list.innerHTML = items.map(item => `
+      <div class="item-row">
+        <div class="item-row-icon">🌰</div>
+        <div class="item-row-info">
+          <div class="item-row-name">${item.아이템이름}</div>
+          <div class="item-row-sub">가격: ${Number(item.필요도토리).toLocaleString()} 도토리 / ${item.남은수량 !== '' ? item.남은수량 + '개' : '무제한'}</div>
+          <div class="item-row-sub" style="color:#444;">${item.상세설명 || ''}</div>
+        </div>
+        <div class="item-row-btns">
+          <button class="del-btn" onclick="deleteItem('${item.아이템이름}')">삭제</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── 상품 등록 ──
+  function registerItem() {
+    const name = document.getElementById('f-name').value.trim();
+    const price = document.getElementById('f-price').value.trim();
+    const qty = document.getElementById('f-qty').value.trim();
+    const desc = document.getElementById('f-desc').value.trim();
+
+    if (!name || !price) { showAlert('알림', '이름과 가격은 필수입니다.'); return; }
+
+    fetch(`${API_URL}?action=addShopItem&name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&qty=${encodeURIComponent(qty)}&desc=${encodeURIComponent(desc)}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          showAlert('완료', data.message || '상품이 등록되었습니다.');
+          document.getElementById('f-name').value = '';
+          document.getElementById('f-price').value = '';
+          document.getElementById('f-qty').value = '';
+          document.getElementById('f-desc').value = '';
+          loadItems();
+        } else {
+          showAlert('오류', data.error);
+        }
+      })
+      .catch(() => showAlert('오류', '서버 연결 실패!'));
+  }
+
+  // ── 상품 삭제 ──
+  function deleteItem(name) {
+    if (!confirm(`[${name}]을 삭제하시겠습니까?`)) return;
+    fetch(`${API_URL}?action=deleteShopItem&name=${encodeURIComponent(name)}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) { showAlert('완료', '삭제되었습니다.'); loadItems(); }
+        else showAlert('오류', data.error);
+      })
+      .catch(() => showAlert('오류', '서버 연결 실패!'));
+  }
+
+  function showAlert(title, msg) {
+    document.getElementById('alert-title').textContent = title;
+    document.getElementById('alert-msg').textContent = msg;
+    document.getElementById('alert-modal').style.display = 'flex';
+  }
+  function closeAlert() {
+    document.getElementById('alert-modal').style.display = 'none';
+  }
+</script>
+
+</body>
+</html>

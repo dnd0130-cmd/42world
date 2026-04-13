@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>42월드 - 도토리 상점</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 100vw; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background: #c8c8d8;
+      background-image:
+        linear-gradient(rgba(150,150,180,0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(150,150,180,0.3) 1px, transparent 1px);
+      background-size: 20px 20px;
+      font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      image-rendering: pixelated;
+      padding: 20px;
+    }
+
+    .monitor {
+      position: relative; width: 900px;
+      background: #d0d0d8;
+      border-radius: 20px 20px 40px 40px;
+      padding: 28px 36px 56px 36px;
+      border: 4px solid #888899;
+      box-shadow:
+        inset 0 0 30px rgba(0,0,0,0.2),
+        4px 4px 0 #888, 8px 8px 0 #666,
+        0 0 0 8px #b8b8c8, 0 0 0 12px #888899;
+    }
+
+    .screen {
+      background: #b8b8cc;
+      border-radius: 8px; padding: 14px;
+      border: 3px inset #888;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .monitor-stand {
+      width: 120px; height: 20px; background: #b0b0c0;
+      margin: 0 auto; border-radius: 0 0 4px 4px;
+      border: 3px solid #888899; border-top: none;
+    }
+    .monitor-base {
+      width: 200px; height: 12px; background: #a8a8b8;
+      margin: 0 auto; border-radius: 2px;
+      border: 3px solid #888899; border-top: none;
+    }
+
+    /* ===== 상단 헤더 ===== */
+    .shop-header {
+      display: flex; align-items: center;
+      background: #c8c8e0;
+      border: 3px solid #888;
+      box-shadow: inset -2px -2px 0 #666, inset 2px 2px 0 #eeeef8;
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      gap: 16px;
+    }
+
+    .char-card {
+      display: flex; align-items: center; gap: 8px;
+      background: #fffff8;
+      border: 2px solid; border-color: #888 #eee #eee #888;
+      padding: 6px 10px;
+      min-width: 160px;
+    }
+
+    .char-avatar {
+      width: 40px; height: 40px;
+      image-rendering: pixelated; flex-shrink: 0;
+    }
+
+    .char-info { line-height: 1.4; }
+    .char-name { font-size: 15px; font-weight: 800; color: #2a2a5a; }
+    .char-acorn { font-size: 11px; font-weight: 700; color: #555; }
+
+    .shop-title {
+      font-size: 42px; font-weight: 800; color: #f8e84a;
+      text-shadow: 3px 3px 0 #8a6800, -1px -1px 0 #c8a000, 4px 4px 0 #5a4400;
+      letter-spacing: 4px; flex: 1; text-align: center;
+    }
+
+    /* ===== 서브바 ===== */
+    .shop-subbar {
+      background: linear-gradient(to right, #8888cc, #b0b0e0);
+      border: 2px solid #6666aa;
+      padding: 4px 8px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .subbar-text {
+      font-size: 12px; font-weight: 800; color: white; letter-spacing: 1px;
+    }
+
+    .win-btns { display: flex; gap: 3px; }
+    .win-btn {
+      width: 16px; height: 14px;
+      background: #c8c8d8;
+      border: 2px solid; border-color: #eee #888 #888 #eee;
+      font-size: 8px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-family: monospace; color: #333;
+    }
+
+    /* ===== 메인 영역 ===== */
+    .shop-body {
+      display: flex; gap: 8px;
+    }
+
+    /* ===== 아이템 그리드 ===== */
+    .items-area { flex: 1; }
+
+    .items-grid {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+
+    .item-card {
+      width: calc(33.33% - 6px);
+      background: #c8c8e0;
+      border: 2px solid #888;
+      box-shadow: inset -1px -1px 0 #666, inset 1px 1px 0 #eee;
+    }
+
+    .item-title-bar {
+      background: linear-gradient(to right, #8888cc, #b0b0e0);
+      padding: 3px 6px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .item-title-text { font-size: 11px; font-weight: 800; color: white; }
+    .item-win-btns { display: flex; gap: 2px; }
+    .item-win-btn {
+      width: 12px; height: 11px; background: #c8c8d8;
+      border: 1px solid; border-color: #eee #888 #888 #eee;
+      font-size: 7px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+
+    .item-body { padding: 10px; }
+
+    .item-img-wrap {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+
+    .item-img {
+      width: 72px; height: 72px;
+      background: #f8f4e8;
+      border: 2px solid; border-color: #888 #eee #eee #888;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      image-rendering: pixelated;
+    }
+
+    .item-meta { flex: 1; }
+    .item-name { font-size: 13px; font-weight: 800; color: #2a2a5a; margin-bottom: 3px; }
+    .item-price { font-size: 12px; font-weight: 700; color: #555; }
+    .item-qty { font-size: 10px; color: #888; margin-top: 2px; }
+
+    .item-divider {
+      border: none; border-top: 1px solid #aaa; margin: 8px 0;
+    }
+
+    .item-desc {
+      font-size: 11px; color: #444; font-weight: 700;
+      text-align: center; line-height: 1.5; min-height: 36px;
+      margin-bottom: 10px;
+    }
+
+    .buy-btn {
+      width: 100%; height: 38px;
+      background: linear-gradient(180deg, #f07830 0%, #d05818 100%);
+      border: 3px solid; border-color: #f8b060 #882800 #882800 #f8b060;
+      color: white; font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 15px; font-weight: 800; cursor: pointer;
+      letter-spacing: 2px; text-shadow: 1px 1px 0 #882800;
+      box-shadow: 2px 2px 0 #550;
+    }
+
+    .buy-btn:hover { background: #f08028; }
+    .buy-btn:active {
+      transform: translate(1px,1px); box-shadow: 1px 1px 0 #550;
+      border-color: #883800 #f8a060 #f8a060 #883800;
+    }
+    .buy-btn:disabled {
+      background: #aaa; border-color: #ccc #888 #888 #ccc;
+      cursor: not-allowed; text-shadow: none;
+    }
+
+    /* ===== 사이드바 ===== */
+    .sidebar {
+      width: 90px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+
+    .sidebar-btn {
+      background: linear-gradient(180deg, #a0a0d8 0%, #8080c0 100%);
+      border: 2px solid; border-color: #c0c0f0 #5050a0 #5050a0 #c0c0f0;
+      color: white; font-family: 'Nanum Gothic', '굴림', Gulim, sans-serif;
+      font-size: 12px; font-weight: 800;
+      padding: 8px 4px; cursor: pointer; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+      text-shadow: 1px 1px 0 #3030a0;
+      box-shadow: 2px 2px 0 #303080;
+    }
+
+    .sidebar-btn:hover { background: #9090c8; }
+    .sidebar-btn:active {
+      transform: translate(1px,1px); box-shadow: 1px 1px 0 #303080;
+      border-color: #5050a0 #c0c0f0 #c0c0f0 #5050a0;
+    }
+
+    .sidebar-icon { font-size: 14px; }
+
+    /* ===== 빈 상태 ===== */
+    .empty-msg {
+      text-align: center; padding: 40px;
+      font-size: 13px; font-weight: 800; color: #888;
+    }
+
+    /* ===== 모달 ===== */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.45);
+      align-items: center; justify-content: center; z-index: 999;
+    }
+    .modal-box {
+      background: #c8c8e0; border: 3px solid #888;
+      box-shadow: inset -2px -2px 0 #666, inset 2px 2px 0 #eeeef8;
+      min-width: 280px;
+    }
+    .modal-title-bar {
+      background: linear-gradient(to right, #7878aa, #a8a8cc);
+      padding: 4px 6px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-title { font-size: 12px; font-weight: 800; color: white; letter-spacing: 1px; }
+    .modal-body { padding: 16px 18px; }
+    .modal-msg { font-size: 13px; font-weight: 800; color: #2a2a5a; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="monitor">
+    <div class="screen">
+
+      <!-- 상단 헤더 -->
+      <div class="shop-header">
+        <div class="char-card">
+          <svg class="char-avatar" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" id="header-avatar">
+            <!-- 기본 아바타 (JS로 교체) -->
+            <rect x="11" y="2" width="10" height="2" fill="#1a0e04"/>
+            <rect x="9"  y="3" width="14" height="3" fill="#2e1c0a"/>
+            <rect x="9"  y="5" width="14" height="10" fill="#f5d0a8"/>
+            <rect x="13" y="8" width="2"  height="2"  fill="#1a0e04"/>
+            <rect x="17" y="8" width="2"  height="2"  fill="#1a0e04"/>
+            <rect x="14" y="12" width="4" height="1"  fill="#e08070"/>
+            <rect x="12" y="15" width="8" height="8"  fill="#8090c8"/>
+            <rect x="9"  y="15" width="3" height="7"  fill="#8090c8"/>
+            <rect x="20" y="15" width="3" height="7"  fill="#8090c8"/>
+            <rect x="12" y="23" width="3" height="4"  fill="#f5d0a8"/>
+            <rect x="17" y="23" width="3" height="4"  fill="#f5d0a8"/>
+          </svg>
+          <div class="char-info">
+            <div class="char-name" id="header-name">-</div>
+            <div class="char-acorn">🌰 보유 도토리: <span id="header-acorn">0</span>개</div>
+          </div>
+        </div>
+        <div class="shop-title">도토리 상점</div>
+      </div>
+
+      <!-- 서브바 -->
+      <div class="shop-subbar">
+        <span class="subbar-text" id="subbar-rank">🌰 LV. 1</span>
+        <div class="win-btns">
+          <div class="win-btn">_</div>
+          <div class="win-btn">□</div>
+          <div class="win-btn" onclick="window.location.href='student.html'">✕</div>
+        </div>
+      </div>
+
+      <!-- 메인 바디 -->
+      <div class="shop-body">
+
+        <!-- 아이템 그리드 -->
+        <div class="items-area">
+          <div class="items-grid" id="items-grid">
+            <div class="empty-msg">상점 아이템을 불러오는 중...</div>
+          </div>
+        </div>
+
+        <!-- 사이드바 -->
+        <div class="sidebar">
+          <button class="sidebar-btn" onclick="window.location.href='student.html'">
+            <span class="sidebar-icon">🏠</span> 홈
+          </button>
+          <button class="sidebar-btn" onclick="window.location.href='student.html#profile'">
+            <span class="sidebar-icon">👤</span> 프로필
+          </button>
+          <button class="sidebar-btn" style="background:linear-gradient(180deg,#f0a030,#d08020);border-color:#f8c060 #884000 #884000 #f8c060;text-shadow:1px 1px 0 #884000;box-shadow:2px 2px 0 #553000;">
+            <span class="sidebar-icon">⭐</span> 레벨 뱃지 상점
+          </button>
+          <button class="sidebar-btn" onclick="window.location.href='student.html#guestbook'">
+            <span class="sidebar-icon">📝</span> 방명록
+          </button>
+          <button class="sidebar-btn" onclick="window.location.href='student.html#diary'">
+            <span class="sidebar-icon">📔</span> 다이어리
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="monitor-stand"></div>
+  <div class="monitor-base"></div>
+</div>
+
+<!-- 알림 모달 -->
+<div class="modal-overlay" id="alert-modal">
+  <div class="modal-box">
+    <div class="modal-title-bar">
+      <span class="modal-title" id="alert-title">알림</span>
+      <div class="win-btn" onclick="closeAlert()">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-msg" id="alert-msg"></div>
+      <div style="text-align:right;">
+        <button onclick="closeAlert()" style="background:#c8c8d8;border:2px solid;border-color:#eee #888 #888 #eee;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:12px;font-weight:700;padding:4px 18px;cursor:pointer;">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbx_gr2iDmweHonevtE0j9eAIuWUqprshP3K63Vh0DVFAe-J0az3J5W9chf4vizqs6tUtQ/exec';
+
+  let currentStudent = null;
+
+  // ── 초기화 ──
+  function init() {
+    const stored = sessionStorage.getItem('student');
+    if (!stored) { window.location.href = 'index.html'; return; }
+    currentStudent = JSON.parse(stored);
+
+    document.getElementById('header-name').textContent = currentStudent.이름;
+    document.getElementById('header-acorn').textContent = (currentStudent.도토리 || 0).toLocaleString();
+    document.getElementById('subbar-rank').textContent = '🌰 LV. ' + (currentStudent.레벨 || 1) + ',  ' + (currentStudent.이름);
+
+    loadShop();
+  }
+
+  // ── 상점 아이템 로드 ──
+  function loadShop() {
+    fetch(API_URL + '?action=getShop')
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) renderItems(data.items);
+        else showAlert('오류', data.error || '상점을 불러오지 못했습니다.');
+      })
+      .catch(() => showAlert('오류', '서버 연결 실패!'));
+  }
+
+  // ── 아이템 렌더 ──
+  function renderItems(items) {
+    const grid = document.getElementById('items-grid');
+    if (!items || items.length === 0) {
+      grid.innerHTML = '<div class="empty-msg">등록된 아이템이 없습니다.</div>';
+      return;
+    }
+    grid.innerHTML = items.map((item, i) => {
+      const soldOut = item.남은수량 !== '' && Number(item.남은수량) <= 0;
+      return `
+        <div class="item-card">
+          <div class="item-title-bar">
+            <span class="item-title-text">${item.아이템이름}</span>
+            <div class="item-win-btns">
+              <div class="item-win-btn">_</div>
+              <div class="item-win-btn">✕</div>
+            </div>
+          </div>
+          <div class="item-body">
+            <div class="item-img-wrap">
+              <div class="item-img">${makeItemSvg(i)}</div>
+              <div class="item-meta">
+                <div class="item-name">${item.아이템이름}</div>
+                <div class="item-price">${Number(item.필요도토리).toLocaleString()} 도토리</div>
+                ${item.남은수량 !== '' ? `<div class="item-qty">(${item.남은수량}개 남음)</div>` : ''}
+              </div>
+            </div>
+            <hr class="item-divider">
+            <div class="item-desc">${item.상세설명 || ''}</div>
+            <button class="buy-btn" ${soldOut ? 'disabled' : ''} onclick="buyItem('${item.아이템이름}')">
+              ${soldOut ? '품절' : '구매하기'}
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ── 아이템 픽셀 아이콘 ──
+  function makeItemSvg(index) {
+    const icons = [
+      // 도토리
+      `<svg width="52" height="52" viewBox="0 0 32 32" style="image-rendering:pixelated;">
+        <rect x="14" y="1" width="4" height="2" fill="#5a3a10"/>
+        <rect x="8" y="3" width="16" height="5" fill="#a07840"/>
+        <rect x="9" y="8" width="14" height="1" fill="#8a6a30"/>
+        <rect x="9" y="9" width="14" height="14" fill="#f0b860"/>
+        <rect x="10" y="9" width="4" height="14" fill="#f8c870" opacity="0.6"/>
+        <rect x="9" y="23" width="14" height="2" fill="#d89040"/>
+        <rect x="11" y="25" width="10" height="2" fill="#c88030"/>
+        <rect x="20" y="11" width="2" height="6" fill="#fff" opacity="0.2"/>
+      </svg>`,
+      // 책상
+      `<svg width="52" height="52" viewBox="0 0 32 32" style="image-rendering:pixelated;">
+        <rect x="4" y="14" width="24" height="4" fill="#c8a060"/>
+        <rect x="4" y="14" width="24" height="2" fill="#d8b070"/>
+        <rect x="5" y="18" width="3" height="10" fill="#a07840"/>
+        <rect x="24" y="18" width="3" height="10" fill="#a07840"/>
+        <rect x="14" y="18" width="4" height="8" fill="#a07840"/>
+        <rect x="8" y="10" width="6" height="5" fill="#5a9a5a"/>
+        <rect x="9" y="11" width="4" height="3" fill="#6ab06a"/>
+        <rect x="18" y="11" width="4" height="4" fill="#c8a060"/>
+        <rect x="18" y="11" width="4" height="2" fill="#d8b070"/>
+      </svg>`,
+      // 뱃지
+      `<svg width="52" height="52" viewBox="0 0 32 32" style="image-rendering:pixelated;">
+        <rect x="8" y="4" width="16" height="24" fill="#5a8a5a" rx="3"/>
+        <rect x="9" y="5" width="14" height="22" fill="#6aaa6a"/>
+        <rect x="13" y="1" width="6" height="4" fill="#7878aa"/>
+        <rect x="14" y="2" width="4" height="2" fill="#9898cc"/>
+        <rect x="14" y="13" width="4" height="4" fill="#f8e84a"/>
+        <rect x="13" y="14" width="6" height="2" fill="#f8e84a"/>
+        <rect x="15" y="11" width="2" height="2" fill="#f8e84a"/>
+        <rect x="15" y="17" width="2" height="2" fill="#f8e84a"/>
+        <rect x="10" y="20" width="12" height="2" fill="#4a7a4a"/>
+        <rect x="10" y="22" width="12" height="2" fill="#4a7a4a"/>
+      </svg>`,
+      // 별
+      `<svg width="52" height="52" viewBox="0 0 32 32" style="image-rendering:pixelated;">
+        <rect x="14" y="4" width="4" height="6" fill="#f8e84a"/>
+        <rect x="10" y="8" width="12" height="4" fill="#f8e84a"/>
+        <rect x="6" y="12" width="20" height="4" fill="#f8e84a"/>
+        <rect x="8" y="16" width="16" height="4" fill="#f8d030"/>
+        <rect x="6" y="20" width="8" height="6" fill="#f8e84a"/>
+        <rect x="18" y="20" width="8" height="6" fill="#f8e84a"/>
+        <rect x="12" y="22" width="8" height="4" fill="#f8d030"/>
+      </svg>`,
+    ];
+    return icons[index % icons.length];
+  }
+
+  // ── 구매 ──
+  function buyItem(itemName) {
+    if (!confirm(`[${itemName}]을 구매하시겠습니까?`)) return;
+    fetch(`${API_URL}?action=buyItem&code=${encodeURIComponent(currentStudent.고유코드)}&itemName=${encodeURIComponent(itemName)}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          currentStudent.도토리 = data.남은도토리;
+          sessionStorage.setItem('student', JSON.stringify(currentStudent));
+          document.getElementById('header-acorn').textContent = data.남은도토리.toLocaleString();
+          showAlert('구매 완료!', data.message);
+          loadShop();
+        } else {
+          showAlert('구매 실패', data.error || '구매할 수 없습니다.');
+        }
+      })
+      .catch(() => showAlert('오류', '서버 연결 실패!'));
+  }
+
+  function showAlert(title, msg) {
+    document.getElementById('alert-title').textContent = title;
+    document.getElementById('alert-msg').textContent = msg;
+    document.getElementById('alert-modal').style.display = 'flex';
+  }
+  function closeAlert() {
+    document.getElementById('alert-modal').style.display = 'none';
+  }
+
+  init();
+</script>
+
+</body>
+</html>
