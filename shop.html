@@ -393,7 +393,7 @@
             </div>
             <hr class="item-divider">
             <div class="item-desc">${item.상세설명 || ''}</div>
-            <button class="buy-btn" ${soldOut ? 'disabled' : ''} onclick="buyItem('${item.아이템이름}')">
+            <button class="buy-btn" ${soldOut ? 'disabled' : ''} onclick="buyItem(${JSON.stringify(item.아이템이름)})">
               ${soldOut ? '품절' : '구매하기'}
             </button>
           </div>
@@ -464,7 +464,7 @@
         if (data.success) {
           currentStudent.도토리 = data.남은도토리;
           sessionStorage.setItem('student', JSON.stringify(currentStudent));
-          document.getElementById('header-acorn').textContent = data.남은도토리.toLocaleString();
+          document.getElementById('header-acorn').textContent = (data.남은도토리 ?? 0).toLocaleString();
           showAlert('구매 완료!', data.message);
           loadShop();
         } else {

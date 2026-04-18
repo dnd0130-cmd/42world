@@ -360,11 +360,11 @@
         <div class="item-row-icon">🌰</div>
         <div class="item-row-info">
           <div class="item-row-name">${item.아이템이름}</div>
-          <div class="item-row-sub">가격: ${Number(item.필요도토리).toLocaleString()} 도토리 / ${item.남은수량 !== '' ? item.남은수량 + '개' : '무제한'}</div>
+          <div class="item-row-sub">가격: ${Number(item.필요도토리 || 0).toLocaleString()} 도토리 / ${item.남은수량 !== '' ? item.남은수량 + '개' : '무제한'}</div>
           <div class="item-row-sub" style="color:#444;">${item.상세설명 || ''}</div>
         </div>
         <div class="item-row-btns">
-          <button class="del-btn" onclick="deleteItem('${item.아이템이름}')">삭제</button>
+          <button class="del-btn" onclick="deleteItem(${JSON.stringify(item.아이템이름)})">삭제</button>
         </div>
       </div>
     `).join('');
