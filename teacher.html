@@ -810,7 +810,7 @@
     const max = Math.max(...weeklyData);
     const colors = ['#e87830','#e87830','#50b850','#50b850','#50b850','#e87830'];
     chart.innerHTML = weeklyData.map((v, i) => {
-      const h = Math.round((v / max) * 68);
+      const h = max === 0 ? 0 : Math.round((v / max) * 68);
       return `<div class="bar-group">
         <div class="bar" style="height:${h}px;background:${colors[i]};border:1px solid rgba(0,0,0,0.2);"></div>
         <div class="bar-label">${weekLabels[i]}</div>
@@ -825,7 +825,7 @@
       <div class="history-item" style="display:flex;align-items:center;justify-content:space-between;gap:4px;">
         <span class="h-name" style="flex:1;font-size:10px;">${h.name} ${h.label}</span>
         <span class="${h.amount > 0 ? 'h-plus' : 'h-minus'}" style="font-size:10px;">${h.amount > 0 ? '+' : ''}${h.amount}개</span>
-        ${!h.label.startsWith('취소:') ? `<button onclick="cancelAcornLog(${h.rowNum},'${h.name}','${h.label}')" style="font-size:9px;padding:1px 4px;background:#cc4444;color:#fff;border:1px solid #882222;cursor:pointer;font-family:'Nanum Gothic',sans-serif;">취소</button>` : '<span style="font-size:9px;color:#aaa;">취소됨</span>'}
+        ${!h.label.startsWith('취소:') ? `<button onclick="cancelAcornLog(${h.rowNum},${JSON.stringify(h.name)},${JSON.stringify(h.label)})" style="font-size:9px;padding:1px 4px;background:#cc4444;color:#fff;border:1px solid #882222;cursor:pointer;font-family:'Nanum Gothic',sans-serif;">취소</button>` : '<span style="font-size:9px;color:#aaa;">취소됨</span>'}
       </div>
     `).join('');
   }
@@ -1098,12 +1098,18 @@
     const resultsEl = document.getElementById('diary-results');
     resultsEl.innerHTML = '<div style="padding:20px;text-align:center;font-size:11px;color:#888;font-weight:700;">불러오는 중...</div>';
     try {
-      const res = await fetch(`${API_URL}?action=getDiaries`);
+      const res = await fetch(`${API_URL}?action=getDiaries&code=${encodeURIComponent(code)}`);
       const data = await res.json();
       if (!data.success) { resultsEl.innerHTML = `<div style="padding:16px;font-size:11px;color:#cc2222;font-weight:700;">오류: ${data.error || '불러오기 실패'}</div>`; return; }
       const all = data.diaries || [];
-      // 선택한 학생 코드로 필터링
-      const entries = all.filter(e => (e.학번 || e.고유코드 || e.code || '') === code);
+      // 선택한 학생 코드 또는 이름으로 필터링
+      const student = students.find(s => String(s.id) === String(code));
+      const entries = all.filter(e => {
+        const entryCode = String(e.고유코드 || e.학번 || e.code || e.Code || '');
+        if (entryCode === String(code)) return true;
+        if (student && String(e.이름 || '') === String(student.name)) return true;
+        return false;
+      });
       const emojiMap = { '행복':'😊', '신남':'🤩', '평범':'😐', '피곤':'😴', '슬픔':'😢', '화남':'😤' };
       if (entries.length === 0) {
         resultsEl.innerHTML = '<div style="padding:20px;text-align:center;font-size:11px;color:#888;font-weight:700;">아직 작성한 다이어리가 없어요.</div>';
