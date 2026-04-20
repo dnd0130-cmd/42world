@@ -1445,7 +1445,7 @@
         <div style="height:8px;"></div>
         <label class="modal-label">칭찬 메시지를 작성해주세요</label>
         <textarea class="modal-textarea" id="praise-message" placeholder="예: 오늘 청소할 때 도와줘서 고마워!"></textarea>
-        <div class="modal-note">💡 칭찬하면 친구에게 도토리 1개가 전달돼요! (하루 2회, 최대 도토리 2개)</div>
+        <div class="modal-note">💡 칭찬하면 친구에게 도토리 1개가 전달돼요! (하루 1회)</div>
         <div class="modal-btn-row">
           <button class="modal-btn" onclick="sendPraise()">💖 칭찬 보내기</button>
           <button class="modal-btn cancel" onclick="closePraiseModal()">취소</button>
@@ -1855,7 +1855,7 @@
     });
 
     // ===== 칭찬하기 =====
-    let praiseRemaining = 2;
+    let praiseRemaining = 1;
     const praiseKey = 'praise_' + new Date().toISOString().slice(0,10);
     if (localStorage.getItem(praiseKey)) {
       praiseRemaining = parseInt(localStorage.getItem(praiseKey));
