@@ -532,6 +532,8 @@
                 <button class="bulk-btn" onclick="openDiaryModal()" style="font-size:12px;letter-spacing:0;height:36px;background:linear-gradient(180deg,#e07830,#b05010);border-color:#f0a060 #703000 #703000 #f0a060;box-shadow:2px 2px 0 #401800;">📔 일기 조회</button>
                 <button class="bulk-btn" onclick="openVoucherApproveModal()" id="voucher-btn" style="font-size:12px;letter-spacing:0;height:36px;background:linear-gradient(180deg,#c0a020,#907000);border-color:#f0d050 #504000 #504000 #f0d050;box-shadow:2px 2px 0 #302000;">🎫 이용권 승인</button>
                 <button class="bulk-btn" onclick="openPurchaseHistoryModal()" style="font-size:12px;letter-spacing:0;height:36px;background:linear-gradient(180deg,#2080c0,#105090);border-color:#60b0f0 #082050 #082050 #60b0f0;box-shadow:2px 2px 0 #041030;">🛍️ 구매 내역</button>
+                <button class="bulk-btn" onclick="openMissionManageModal()" id="mission-manage-btn" style="font-size:12px;letter-spacing:0;height:36px;background:linear-gradient(180deg,#20a060,#107040);border-color:#60d090 #084030 #084030 #60d090;box-shadow:2px 2px 0 #042018;grid-column:span 2;">🎯 미션 관리</button>
+                <button class="bulk-btn" onclick="openMissionApproveModal()" id="mission-approve-btn" style="font-size:12px;letter-spacing:0;height:36px;background:linear-gradient(180deg,#c04080,#802060);border-color:#f080c0 #401030 #401030 #f080c0;box-shadow:2px 2px 0 #200818;grid-column:span 2;">📬 미션 제출 승인</button>
               </div>
             </div>
           </div>
@@ -631,6 +633,63 @@
   </div>
 </div>
 
+<!-- 미션 관리 모달 -->
+<div class="modal-overlay" id="mission-manage-modal" style="display:none;">
+  <div class="modal-box" style="min-width:400px;max-width:560px;width:94%;">
+    <div class="panel-title-bar">
+      <span class="panel-title">🎯 미션 관리</span>
+      <div class="panel-controls"><div class="panel-btn" onclick="closeMissionManageModal()">✕</div></div>
+    </div>
+    <div style="padding:14px 16px;background:#fffff8;">
+      <!-- 미션 생성 폼 -->
+      <div style="background:#f0f8f0;border:2px solid #80c080;padding:12px;margin-bottom:14px;border-radius:2px;">
+        <div style="font-size:12px;font-weight:800;color:#1a5a1a;margin-bottom:8px;">➕ 새 미션 만들기</div>
+        <div style="display:grid;grid-template-columns:1fr 80px;gap:6px;margin-bottom:6px;">
+          <input type="text" id="new-mission-title" placeholder="미션 제목 (예: 책 읽고 독후감 쓰기)"
+            style="height:26px;background:#fffff8;border:2px solid;border-color:#888 #eee #eee #888;font-family:'Nanum Gothic',sans-serif;font-size:11px;font-weight:700;padding:0 6px;outline:none;">
+          <input type="number" id="new-mission-reward" placeholder="도토리" min="1" value="20"
+            style="height:26px;background:#fffff8;border:2px solid;border-color:#888 #eee #eee #888;font-family:'Nanum Gothic',sans-serif;font-size:11px;font-weight:700;padding:0 6px;outline:none;text-align:center;">
+        </div>
+        <textarea id="new-mission-content" placeholder="미션 내용을 자세히 설명해주세요..."
+          style="width:100%;height:64px;background:#fffff8;border:2px solid;border-color:#888 #eee #eee #888;font-family:'Nanum Gothic',sans-serif;font-size:11px;font-weight:700;padding:4px 6px;outline:none;resize:none;margin-bottom:6px;"></textarea>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <label style="font-size:11px;font-weight:800;color:#333;white-space:nowrap;">마감일</label>
+          <input type="date" id="new-mission-deadline"
+            style="flex:1;height:26px;background:#fffff8;border:2px solid;border-color:#888 #eee #eee #888;font-family:'Nanum Gothic',sans-serif;font-size:11px;font-weight:700;padding:0 6px;outline:none;">
+          <button onclick="createMission()"
+            style="height:26px;padding:0 12px;background:#228822;color:#fff;border:2px solid;border-color:#44aa44 #115511 #115511 #44aa44;font-family:'Nanum Gothic',sans-serif;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;">
+            만들기
+          </button>
+        </div>
+      </div>
+      <!-- 미션 목록 -->
+      <div style="font-size:12px;font-weight:800;color:#333;margin-bottom:6px;">📋 현재 미션 목록</div>
+      <div id="mission-manage-list" style="max-height:260px;overflow-y:auto;border:2px solid;border-color:#888 #eee #eee #888;background:#f8f8ff;padding:6px;"></div>
+      <div style="margin-top:10px;text-align:right;">
+        <button onclick="closeMissionManageModal()"
+          style="padding:4px 14px;background:#888;color:#fff;border:2px solid #666;font-size:11px;font-weight:700;cursor:pointer;">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 미션 제출 승인 모달 -->
+<div class="modal-overlay" id="mission-approve-modal" style="display:none;">
+  <div class="modal-box" style="min-width:380px;max-width:560px;width:94%;">
+    <div class="panel-title-bar">
+      <span class="panel-title">📬 미션 제출 승인</span>
+      <div class="panel-controls"><div class="panel-btn" onclick="closeMissionApproveModal()">✕</div></div>
+    </div>
+    <div style="padding:12px;background:#fffff8;">
+      <div id="pending-mission-list" style="max-height:380px;overflow-y:auto;"></div>
+      <div style="margin-top:8px;text-align:right;">
+        <button onclick="closeMissionApproveModal()"
+          style="padding:4px 14px;background:#888;color:#fff;border:2px solid #666;font-size:11px;font-weight:700;cursor:pointer;">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 알림 모달 -->
 <div class="modal-overlay" id="alert-modal" style="display:none;">
   <div class="modal-box">
@@ -662,6 +721,7 @@
     await Promise.all([loadStudents(), loadLog()]);
     renderChart();
     checkPendingVouchers();
+    checkPendingMissions();
   }
 
   function checkPendingVouchers() {
@@ -1129,6 +1189,192 @@
     } catch(e) {
       resultsEl.innerHTML = '<div style="padding:16px;font-size:11px;color:#cc2222;font-weight:700;">서버 연결 실패!</div>';
     }
+  }
+
+  // ── 미션 관리 ──
+  function openMissionManageModal() {
+    document.getElementById('mission-manage-modal').style.display = 'flex';
+    loadMissionManageList();
+  }
+  function closeMissionManageModal() {
+    document.getElementById('mission-manage-modal').style.display = 'none';
+  }
+
+  function loadMissionManageList() {
+    const div = document.getElementById('mission-manage-list');
+    div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:16px;">불러오는 중...</div>';
+    fetch(API_URL + '?action=getMissions&all=1')
+      .then(r => r.json())
+      .then(data => {
+        if (!data.success || !data.missions || data.missions.length === 0) {
+          div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:16px;">만들어진 미션이 없어요.</div>';
+          return;
+        }
+        div.innerHTML = '';
+        data.missions.forEach(m => {
+          const isActive = m.상태 === '활성';
+          const statusColor = isActive ? '#2a7a2a' : '#888';
+          div.innerHTML += `
+            <div style="display:flex;align-items:center;gap:6px;padding:7px 6px;border-bottom:1px solid #ddd;">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:12px;font-weight:800;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">🎯 ${m.제목}</div>
+                <div style="font-size:10px;color:#888;">+${m.보상도토리}🌰 ${m.마감일 ? '· 마감: ' + m.마감일 : ''}</div>
+              </div>
+              <div style="font-size:10px;font-weight:800;color:${statusColor};white-space:nowrap;">${isActive ? '✅ 활성' : '⏸ 비활성'}</div>
+              <button onclick="toggleMission(${JSON.stringify(m.id)})"
+                style="height:24px;padding:0 6px;background:#a0a0c0;color:#fff;border:2px solid #7070a0;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;">
+                ${isActive ? '비활성화' : '활성화'}
+              </button>
+              <button onclick="deleteMission(${JSON.stringify(m.id)},${JSON.stringify(m.제목)})"
+                style="height:24px;padding:0 6px;background:#aa2222;color:#fff;border:2px solid #881111;font-size:10px;font-weight:700;cursor:pointer;">
+                삭제
+              </button>
+            </div>`;
+        });
+      })
+      .catch(() => { div.innerHTML = '<div style="color:#cc2222;font-size:11px;padding:8px;">불러오기 실패</div>'; });
+  }
+
+  async function createMission() {
+    const title = document.getElementById('new-mission-title').value.trim();
+    const content = document.getElementById('new-mission-content').value.trim();
+    const reward = parseInt(document.getElementById('new-mission-reward').value) || 0;
+    const deadline = document.getElementById('new-mission-deadline').value;
+    if (!title) { showAlert('알림', '미션 제목을 입력해주세요.'); return; }
+    if (!content) { showAlert('알림', '미션 내용을 입력해주세요.'); return; }
+    if (reward < 1) { showAlert('알림', '보상 도토리를 1개 이상 입력해주세요.'); return; }
+    try {
+      const res = await fetch(`${API_URL}?action=createMission&title=${encodeURIComponent(title)}&content=${encodeURIComponent(content)}&reward=${reward}&deadline=${encodeURIComponent(deadline)}`);
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('new-mission-title').value = '';
+        document.getElementById('new-mission-content').value = '';
+        document.getElementById('new-mission-reward').value = '20';
+        document.getElementById('new-mission-deadline').value = '';
+        showAlert('완료', '미션이 만들어졌어요! 🎯');
+        loadMissionManageList();
+      } else {
+        showAlert('오류', data.error || '미션 생성 실패!');
+      }
+    } catch(e) { showAlert('오류', '서버 연결 실패!'); }
+  }
+
+  function toggleMission(id) {
+    fetch(`${API_URL}?action=toggleMission&id=${encodeURIComponent(id)}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) loadMissionManageList();
+        else showAlert('오류', data.error || '실패!');
+      })
+      .catch(() => showAlert('오류', '서버 연결 실패!'));
+  }
+
+  function deleteMission(id, title) {
+    if (!confirm('[' + title + '] 미션을 삭제하시겠어요?')) return;
+    fetch(`${API_URL}?action=deleteMission&id=${encodeURIComponent(id)}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) { showAlert('완료', '미션이 삭제됐어요.'); loadMissionManageList(); }
+        else showAlert('오류', data.error || '삭제 실패!');
+      })
+      .catch(() => showAlert('오류', '서버 연결 실패!'));
+  }
+
+  // ── 미션 제출 승인 ──
+  function openMissionApproveModal() {
+    document.getElementById('mission-approve-modal').style.display = 'flex';
+    loadPendingMissions();
+  }
+  function closeMissionApproveModal() {
+    document.getElementById('mission-approve-modal').style.display = 'none';
+  }
+
+  function loadPendingMissions() {
+    const div = document.getElementById('pending-mission-list');
+    div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:16px;">불러오는 중...</div>';
+    fetch(API_URL + '?action=getPendingMissionSubmissions')
+      .then(r => r.json())
+      .then(data => {
+        if (!data.success || !data.submissions || data.submissions.length === 0) {
+          div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:20px;">승인 대기 중인 미션 제출이 없어요 ✅</div>';
+          updateMissionApproveBtn(0);
+          return;
+        }
+        updateMissionApproveBtn(data.submissions.length);
+        div.innerHTML = '';
+        data.submissions.forEach(s => {
+          const fileHtml = s.파일링크 ? `<a href="${s.파일링크}" target="_blank"
+            style="display:inline-block;margin-top:4px;padding:3px 8px;background:#4878d0;color:#fff;border:2px solid #2050a0;font-size:10px;font-weight:700;text-decoration:none;">
+            📎 첨부파일 보기
+          </a>` : '';
+          div.innerHTML += `
+            <div style="background:#fffde8;border:2px solid #ccaa00;padding:10px;margin-bottom:8px;border-radius:2px;">
+              <div style="font-size:12px;font-weight:800;color:#333;">🎯 ${s.미션제목}</div>
+              <div style="font-size:11px;color:#555;margin-top:2px;">학생: ${s.학생이름} (${s.학생코드})</div>
+              <div style="font-size:10px;color:#888;">제출일: ${new Date(s.제출일).toLocaleString()}</div>
+              ${s.메모 ? `<div style="font-size:11px;color:#333;margin-top:4px;background:#fff8e8;padding:4px 6px;border-left:3px solid #e8a020;">"${s.메모}"</div>` : ''}
+              ${fileHtml}
+              <div style="display:flex;gap:6px;margin-top:8px;">
+                <button onclick="approveMissionSubmission(${JSON.stringify(s.id)},${JSON.stringify(s.학생이름)},${JSON.stringify(s.미션제목)},${s.보상도토리})"
+                  style="padding:4px 12px;background:#2a7a2a;color:#fff;border:2px solid #1a5a1a;font-size:10px;font-weight:700;cursor:pointer;">
+                  ✅ 승인 (+${s.보상도토리}🌰)
+                </button>
+                <button onclick="rejectMissionSubmission(${JSON.stringify(s.id)},${JSON.stringify(s.학생이름)},${JSON.stringify(s.미션제목)})"
+                  style="padding:4px 12px;background:#aa2222;color:#fff;border:2px solid #881111;font-size:10px;font-weight:700;cursor:pointer;">
+                  ❌ 거절
+                </button>
+              </div>
+            </div>`;
+        });
+      })
+      .catch(() => { div.innerHTML = '<div style="color:#cc2222;font-size:11px;padding:8px;">불러오기 실패</div>'; });
+  }
+
+  function updateMissionApproveBtn(count) {
+    const btn = document.getElementById('mission-approve-btn');
+    if (!btn) return;
+    if (count > 0) {
+      btn.style.background = 'linear-gradient(180deg,#e04040,#b02020)';
+      btn.style.borderColor = '#ff8080 #601010 #601010 #ff8080';
+      btn.textContent = '📬 미션 제출 승인 (' + count + ')';
+    } else {
+      btn.style.background = 'linear-gradient(180deg,#c04080,#802060)';
+      btn.style.borderColor = '#f080c0 #401030 #401030 #f080c0';
+      btn.textContent = '📬 미션 제출 승인';
+    }
+  }
+
+  function approveMissionSubmission(id, name, title, reward) {
+    if (!confirm(name + '의 [' + title + '] 미션 제출을 승인하고 ' + reward + '개 도토리를 지급하시겠어요?')) return;
+    fetch(`${API_URL}?action=approveMissionSubmission&id=${encodeURIComponent(id)}`)
+      .then(r => r.json())
+      .then(data => {
+        showAlert(data.success ? '승인 완료' : '오류', data.success ? data.message : (data.error || '실패!'));
+        if (data.success) { loadPendingMissions(); loadLog(); loadStudents(); }
+      })
+      .catch(() => showAlert('오류', '서버 연결 실패!'));
+  }
+
+  function rejectMissionSubmission(id, name, title) {
+    if (!confirm(name + '의 [' + title + '] 미션 제출을 거절하시겠어요?')) return;
+    fetch(`${API_URL}?action=rejectMissionSubmission&id=${encodeURIComponent(id)}`)
+      .then(r => r.json())
+      .then(data => {
+        showAlert(data.success ? '거절 완료' : '오류', data.success ? data.message : (data.error || '실패!'));
+        if (data.success) loadPendingMissions();
+      })
+      .catch(() => showAlert('오류', '서버 연결 실패!'));
+  }
+
+  function checkPendingMissions() {
+    fetch(API_URL + '?action=getPendingMissionSubmissions')
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.submissions && data.submissions.length > 0) {
+          updateMissionApproveBtn(data.submissions.length);
+        }
+      })
+      .catch(() => {});
   }
 
   // ── 초기화 ──

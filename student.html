@@ -1406,6 +1406,20 @@
                 </svg>
                 <span class="side-menu-label">내<br>이용권</span>
               </div>
+              <div class="side-menu-item" onclick="openMissionModal()">
+                <svg class="side-menu-icon" viewBox="0 0 16 16">
+                  <rect x="2" y="2" width="12" height="12" fill="#c0e0ff" rx="1"/>
+                  <rect x="2" y="2" width="12" height="3" fill="#4080c0" rx="1"/>
+                  <rect x="4" y="7" width="3" height="3" fill="#f8e84a" rx="1"/>
+                  <rect x="9" y="7" width="3" height="1" fill="#555"/>
+                  <rect x="9" y="9" width="5" height="1" fill="#555"/>
+                  <rect x="4" y="11" width="3" height="3" fill="#80e080" rx="1"/>
+                  <rect x="9" y="11" width="3" height="1" fill="#555"/>
+                  <rect x="9" y="13" width="5" height="1" fill="#555"/>
+                  <rect x="5" y="8" width="1" height="1" fill="#e86820"/>
+                </svg>
+                <span class="side-menu-label">미션</span>
+              </div>
             </div>
           </div>
 
@@ -1494,6 +1508,86 @@
         <div id="voucher-list" style="max-height:300px;overflow-y:auto;"></div>
         <div class="modal-btn-row" style="margin-top:8px;">
           <button class="modal-btn cancel" onclick="closeVoucherModal()">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 미션 모달 ===== -->
+  <div class="modal-overlay" id="mission-modal" style="display:none;" onclick="if(event.target===this)closeMissionModal()">
+    <div class="modal-window" style="min-width:340px;max-width:480px;width:94%;">
+      <div class="modal-title-bar">
+        <span class="modal-title-text">🎯 미션</span>
+        <div class="modal-close" onclick="closeMissionModal()">✕</div>
+      </div>
+      <div class="modal-body" style="padding:10px 14px 14px;">
+        <!-- 탭 -->
+        <div style="display:flex;gap:4px;margin-bottom:10px;">
+          <button id="mtab-list" onclick="switchMissionTab('list')"
+            style="flex:1;height:26px;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:11px;font-weight:800;border:2px solid;border-color:#eee #888 #888 #eee;cursor:pointer;background:#7878aa;color:#fff;">
+            📋 미션 목록
+          </button>
+          <button id="mtab-my" onclick="switchMissionTab('my')"
+            style="flex:1;height:26px;font-family:'Nanum Gothic','굴림',Gulim,sans-serif;font-size:11px;font-weight:800;border:2px solid;border-color:#eee #888 #888 #eee;cursor:pointer;background:#c8c8d8;color:#333;">
+            📬 내 제출 현황
+          </button>
+        </div>
+        <div id="mission-list-content" style="max-height:320px;overflow-y:auto;"></div>
+        <div class="modal-btn-row" style="margin-top:8px;">
+          <button class="modal-btn cancel" onclick="closeMissionModal()">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 미션 상세/제출 모달 ===== -->
+  <div class="modal-overlay" id="mission-detail-modal" style="display:none;" onclick="if(event.target===this)closeMissionDetailModal()">
+    <div class="modal-window" style="min-width:320px;max-width:460px;width:94%;">
+      <div class="modal-title-bar">
+        <span class="modal-title-text" id="mdetail-title">미션 상세</span>
+        <div class="modal-close" onclick="closeMissionDetailModal()">✕</div>
+      </div>
+      <div class="modal-body" style="padding:14px 16px;">
+        <div style="background:#fffde8;border:2px solid #ccaa00;padding:10px;margin-bottom:12px;border-radius:2px;">
+          <div style="font-size:12px;font-weight:800;color:#333;white-space:pre-wrap;" id="mdetail-content"></div>
+          <div style="display:flex;gap:12px;margin-top:8px;">
+            <div style="font-size:11px;color:#e86820;font-weight:800;">🌰 보상: <span id="mdetail-reward"></span> 도토리</div>
+            <div style="font-size:11px;color:#888;font-weight:700;">📅 <span id="mdetail-deadline"></span></div>
+          </div>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:#2a2a5a;margin-bottom:6px;">📎 증빙 파일 첨부 (선택)</div>
+        <input type="file" id="mdetail-file" accept="image/*,.pdf"
+          style="width:100%;font-family:'Nanum Gothic',sans-serif;font-size:11px;margin-bottom:6px;border:2px solid;border-color:#888 #eee #eee #888;padding:4px;background:#fffff8;cursor:pointer;">
+        <img id="mdetail-preview" style="display:none;max-width:100%;max-height:160px;object-fit:contain;border:2px solid #ccc;margin-bottom:8px;" alt="미리보기">
+        <div style="font-size:12px;font-weight:800;color:#2a2a5a;margin-bottom:6px;">💬 한마디 메모 (선택)</div>
+        <textarea id="mdetail-memo" class="modal-textarea" placeholder="미션을 어떻게 완수했는지 간단히 적어주세요!" style="height:70px;"></textarea>
+        <div style="font-size:10px;color:#888;font-weight:700;margin-top:4px;">📌 파일 첨부 없이 메모만 제출해도 돼요. 선생님 확인 후 도토리가 지급됩니다.</div>
+        <div class="modal-btn-row">
+          <button class="modal-btn" id="mdetail-submit-btn" onclick="submitMission()">📤 미션 제출하기</button>
+          <button class="modal-btn cancel" onclick="closeMissionDetailModal()">취소</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 제출 수정 모달 ===== -->
+  <div class="modal-overlay" id="edit-submission-modal" style="display:none;" onclick="if(event.target===this)closeEditSubmissionModal()">
+    <div class="modal-window" style="min-width:300px;max-width:420px;width:94%;">
+      <div class="modal-title-bar">
+        <span class="modal-title-text" id="edit-sub-title">제출 수정</span>
+        <div class="modal-close" onclick="closeEditSubmissionModal()">✕</div>
+      </div>
+      <div class="modal-body" style="padding:14px 16px;">
+        <div style="font-size:12px;font-weight:800;color:#2a2a5a;margin-bottom:6px;">📎 파일 다시 첨부 (선택)</div>
+        <input type="file" id="edit-sub-file" accept="image/*,.pdf"
+          style="width:100%;font-family:'Nanum Gothic',sans-serif;font-size:11px;margin-bottom:6px;border:2px solid;border-color:#888 #eee #eee #888;padding:4px;background:#fffff8;cursor:pointer;">
+        <img id="edit-sub-preview" style="display:none;max-width:100%;max-height:140px;object-fit:contain;border:2px solid #ccc;margin-bottom:8px;" alt="미리보기">
+        <div style="font-size:12px;font-weight:800;color:#2a2a5a;margin-bottom:6px;">💬 메모 수정</div>
+        <textarea id="edit-sub-memo" class="modal-textarea" style="height:70px;" placeholder="메모를 수정하세요"></textarea>
+        <div style="font-size:10px;color:#888;font-weight:700;margin-top:4px;">📌 파일을 새로 첨부하지 않으면 기존 파일이 유지돼요.</div>
+        <div class="modal-btn-row">
+          <button class="modal-btn" id="edit-sub-btn" onclick="saveEditSubmission()">💾 수정 완료</button>
+          <button class="modal-btn cancel" onclick="closeEditSubmissionModal()">취소</button>
         </div>
       </div>
     </div>
@@ -2140,8 +2234,303 @@
         closeDiaryModal();
         closeGuestbookModal();
         closeVoucherModal();
+        closeMissionModal();
+        closeMissionDetailModal();
+        closeEditSubmissionModal();
       }
     });
+
+    // ===== 미션 =====
+    let missionTab = 'list'; // 'list' | 'my'
+
+    function openMissionModal() {
+      document.getElementById('mission-modal').style.display = 'flex';
+      switchMissionTab('list');
+    }
+    function closeMissionModal() {
+      document.getElementById('mission-modal').style.display = 'none';
+    }
+    function closeMissionDetailModal() {
+      document.getElementById('mission-detail-modal').style.display = 'none';
+    }
+
+    function switchMissionTab(tab) {
+      missionTab = tab;
+      document.getElementById('mtab-list').style.background = tab === 'list' ? '#7878aa' : '#c8c8d8';
+      document.getElementById('mtab-list').style.color = tab === 'list' ? '#fff' : '#333';
+      document.getElementById('mtab-my').style.background = tab === 'my' ? '#7878aa' : '#c8c8d8';
+      document.getElementById('mtab-my').style.color = tab === 'my' ? '#fff' : '#333';
+      if (tab === 'list') loadMissions();
+      else loadMyMissionSubmissions();
+    }
+
+    let missionCache = [];
+
+    function loadMissions() {
+      const div = document.getElementById('mission-list-content');
+      div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:20px;">불러오는 중...</div>';
+      fetch(API_URL + '?action=getMissions')
+        .then(r => r.json())
+        .then(data => {
+          if (!data.success || !data.missions || data.missions.length === 0) {
+            div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:24px;">현재 진행 중인 미션이 없어요 🎯</div>';
+            return;
+          }
+          missionCache = data.missions;
+          div.innerHTML = '';
+          data.missions.forEach((m, idx) => {
+            const deadline = m.마감일 ? `마감: ${m.마감일}` : '기간 없음';
+            const card = document.createElement('div');
+            card.style.cssText = 'background:#fffde8;border:2px solid #ccaa00;padding:10px 12px;margin-bottom:8px;cursor:pointer;border-radius:2px;';
+            card.innerHTML = `
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-weight:800;font-size:13px;color:#333;">🎯 ${m.제목}</div>
+                <div style="background:#e86820;color:#fff;font-size:11px;font-weight:800;padding:2px 8px;border:1px solid #a04000;">+${m.보상도토리}🌰</div>
+              </div>
+              <div style="font-size:11px;color:#666;margin-top:4px;overflow:hidden;text-overflow:ellipsis;">${m.내용}</div>
+              <div style="font-size:10px;color:#999;margin-top:3px;">${deadline}</div>`;
+            card.addEventListener('click', () => openMissionDetail(idx));
+            div.appendChild(card);
+          });
+        })
+        .catch(() => { div.innerHTML = '<div style="color:#cc2222;font-size:11px;padding:8px;">불러오기 실패</div>'; });
+    }
+
+    let submissionCache = [];
+
+    function loadMyMissionSubmissions() {
+      const div = document.getElementById('mission-list-content');
+      div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:20px;">불러오는 중...</div>';
+      fetch(API_URL + '?action=getMissionSubmissions&code=' + encodeURIComponent(currentStudent.고유코드))
+        .then(r => r.json())
+        .then(data => {
+          if (!data.success || !data.submissions || data.submissions.length === 0) {
+            div.innerHTML = '<div style="text-align:center;color:#aaa;font-size:11px;padding:24px;">제출한 미션이 없어요!<br><span style="font-size:10px;">미션을 완수하고 제출해보세요 🎯</span></div>';
+            return;
+          }
+          submissionCache = data.submissions;
+          div.innerHTML = '';
+          data.submissions.forEach((s, idx) => {
+            const statusColor = s.상태 === '승인' ? '#2a7a2a' : s.상태 === '거절' ? '#cc2222' : '#e88a00';
+            const statusEmoji = s.상태 === '승인' ? '✅' : s.상태 === '거절' ? '❌' : '⏳';
+            const card = document.createElement('div');
+            card.style.cssText = 'background:#f8f8ff;border:2px solid #aaa;padding:8px 10px;margin-bottom:6px;border-radius:2px;';
+            let inner = `
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
+                <div style="font-weight:800;font-size:12px;color:#333;">🎯 ${s.미션제목}</div>
+                <div style="color:${statusColor};font-size:11px;font-weight:800;">${statusEmoji} ${s.상태}</div>
+              </div>`;
+            if (s.상태 === '승인') inner += `<div style="font-size:11px;color:#2a7a2a;font-weight:800;">🌰 +${s.보상도토리}개 지급 완료!</div>`;
+            inner += `<div style="font-size:10px;color:#999;margin-top:2px;">제출일: ${new Date(s.제출일).toLocaleDateString()}</div>`;
+            if (s.메모) inner += `<div style="font-size:11px;color:#555;margin-top:3px;font-style:italic;">"${s.메모}"</div>`;
+            if (s.상태 === '대기중') {
+              inner += `<div style="display:flex;gap:5px;margin-top:7px;">
+                <button onclick="openEditSubmission(${idx})"
+                  style="flex:1;height:24px;background:#4878d0;color:#fff;border:2px solid #2050a0;font-family:'Nanum Gothic',sans-serif;font-size:10px;font-weight:800;cursor:pointer;">
+                  ✏️ 수정
+                </button>
+                <button onclick="withdrawSubmission('${s.id}')"
+                  style="flex:1;height:24px;background:#aa2222;color:#fff;border:2px solid #881111;font-family:'Nanum Gothic',sans-serif;font-size:10px;font-weight:800;cursor:pointer;">
+                  🗑 회수
+                </button>
+              </div>`;
+            }
+            card.innerHTML = inner;
+            div.appendChild(card);
+          });
+        })
+        .catch(() => { div.innerHTML = '<div style="color:#cc2222;font-size:11px;padding:8px;">불러오기 실패</div>'; });
+    }
+
+    function withdrawSubmission(id) {
+      if (!confirm('제출을 회수하시겠어요? 다시 제출할 수 있어요.')) return;
+      fetch(`${API_URL}?action=withdrawMissionSubmission&id=${encodeURIComponent(id)}&code=${encodeURIComponent(currentStudent.고유코드)}`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) { loadMyMissionSubmissions(); }
+          else alert(data.error || '회수 실패!');
+        })
+        .catch(() => alert('서버 연결 실패!'));
+    }
+
+    let editSubmissionId = null;
+    function openEditSubmission(idx) {
+      const s = submissionCache[idx];
+      if (!s) return;
+      editSubmissionId = s.id;
+      document.getElementById('edit-sub-title').textContent = '✏️ ' + s.미션제목;
+      document.getElementById('edit-sub-memo').value = s.메모 || '';
+      document.getElementById('edit-sub-file').value = '';
+      document.getElementById('edit-sub-preview').style.display = 'none';
+      document.getElementById('edit-sub-preview').src = '';
+      document.getElementById('edit-sub-btn').textContent = '💾 수정 완료';
+      document.getElementById('edit-sub-btn').disabled = false;
+      document.getElementById('edit-submission-modal').style.display = 'flex';
+    }
+    function closeEditSubmissionModal() {
+      document.getElementById('edit-submission-modal').style.display = 'none';
+    }
+
+    async function saveEditSubmission() {
+      if (!editSubmissionId) return;
+      const memo = document.getElementById('edit-sub-memo').value.trim();
+      const fileInput = document.getElementById('edit-sub-file');
+      const file = fileInput.files[0];
+      const btn = document.getElementById('edit-sub-btn');
+      btn.textContent = '저장 중...';
+      btn.disabled = true;
+      try {
+        let fileData = '', fileName = '', fileType = '';
+        if (file) {
+          if (file.size > 10 * 1024 * 1024) { alert('파일 크기는 10MB 이하만 가능해요!'); btn.textContent = '💾 수정 완료'; btn.disabled = false; return; }
+          fileData = file.type.startsWith('image/') ? await compressImage(file, 1200, 0.75) : await new Promise(r => { const fr = new FileReader(); fr.onload = e => r(e.target.result); fr.readAsDataURL(file); });
+          fileName = file.name;
+          fileType = file.type;
+        }
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'updateMissionSubmission', id: editSubmissionId, code: currentStudent.고유코드, memo, fileData, fileName, fileType })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('수정이 완료됐어요!');
+          closeEditSubmissionModal();
+          loadMyMissionSubmissions();
+        } else {
+          alert(data.error || '수정 실패!');
+          btn.textContent = '💾 수정 완료';
+          btn.disabled = false;
+        }
+      } catch(e) {
+        alert('서버 연결 실패!');
+        btn.textContent = '💾 수정 완료';
+        btn.disabled = false;
+      }
+    }
+
+    let currentMissionId = null;
+    function openMissionDetail(idx) {
+      const m = missionCache[idx];
+      if (!m) return;
+      currentMissionId = m.id;
+      document.getElementById('mdetail-title').textContent = '🎯 ' + m.제목;
+      document.getElementById('mdetail-content').textContent = m.내용;
+      document.getElementById('mdetail-reward').textContent = '+' + m.보상도토리 + '개';
+      document.getElementById('mdetail-deadline').textContent = m.마감일 || '기간 없음';
+      document.getElementById('mdetail-memo').value = '';
+      document.getElementById('mdetail-file').value = '';
+      document.getElementById('mdetail-preview').style.display = 'none';
+      document.getElementById('mdetail-preview').src = '';
+      document.getElementById('mdetail-submit-btn').textContent = '📤 미션 제출하기';
+      document.getElementById('mdetail-submit-btn').disabled = false;
+      document.getElementById('mission-detail-modal').style.display = 'flex';
+    }
+
+    function bindFilePreview(inputId, previewId) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      input.addEventListener('change', function() {
+        const file = this.files[0];
+        const preview = document.getElementById(previewId);
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
+          reader.readAsDataURL(file);
+        } else {
+          preview.style.display = 'none';
+        }
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      bindFilePreview('mdetail-file', 'mdetail-preview');
+      bindFilePreview('edit-sub-file', 'edit-sub-preview');
+    });
+
+    async function compressImage(file, maxWidth, quality) {
+      return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const scale = Math.min(1, maxWidth / img.width);
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function submitMission() {
+      if (!currentMissionId) return;
+      const memo = document.getElementById('mdetail-memo').value.trim();
+      const fileInput = document.getElementById('mdetail-file');
+      const file = fileInput.files[0];
+
+      const btn = document.getElementById('mdetail-submit-btn');
+      btn.textContent = '제출 중...';
+      btn.disabled = true;
+
+      try {
+        let fileData = '';
+        let fileName = '';
+        let fileType = '';
+        if (file) {
+          if (file.size > 10 * 1024 * 1024) {
+            alert('파일 크기는 10MB 이하만 가능해요!');
+            btn.textContent = '📤 미션 제출하기';
+            btn.disabled = false;
+            return;
+          }
+          if (file.type.startsWith('image/')) {
+            fileData = await compressImage(file, 1200, 0.75);
+          } else {
+            fileData = await new Promise(resolve => {
+              const reader = new FileReader();
+              reader.onload = e => resolve(e.target.result);
+              reader.readAsDataURL(file);
+            });
+          }
+          fileName = file.name;
+          fileType = file.type;
+        }
+
+        const body = JSON.stringify({
+          action: 'submitMission',
+          missionId: currentMissionId,
+          code: currentStudent.고유코드,
+          memo: memo,
+          fileData: fileData,
+          fileName: fileName,
+          fileType: fileType
+        });
+
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: body
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('미션을 제출했어요! 선생님이 확인 후 도토리를 지급해드려요 🎯');
+          document.getElementById('mission-detail-modal').style.display = 'none';
+          switchMissionTab('my');
+        } else {
+          alert(data.error || '제출 실패!');
+          btn.textContent = '📤 미션 제출하기';
+          btn.disabled = false;
+        }
+      } catch(e) {
+        alert('서버 연결 실패!');
+        btn.textContent = '📤 미션 제출하기';
+        btn.disabled = false;
+      }
+    }
   </script>
 
 </body>
