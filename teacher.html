@@ -1303,28 +1303,23 @@
         updateMissionApproveBtn(data.submissions.length);
         div.innerHTML = '';
         data.submissions.forEach(s => {
-          const fileHtml = s.파일링크 ? `<a href="${s.파일링크}" target="_blank"
-            style="display:inline-block;margin-top:4px;padding:3px 8px;background:#4878d0;color:#fff;border:2px solid #2050a0;font-size:10px;font-weight:700;text-decoration:none;">
-            📎 첨부파일 보기
-          </a>` : '';
-          div.innerHTML += `
-            <div style="background:#fffde8;border:2px solid #ccaa00;padding:10px;margin-bottom:8px;border-radius:2px;">
-              <div style="font-size:12px;font-weight:800;color:#333;">🎯 ${s.미션제목}</div>
-              <div style="font-size:11px;color:#555;margin-top:2px;">학생: ${s.학생이름} (${s.학생코드})</div>
-              <div style="font-size:10px;color:#888;">제출일: ${new Date(s.제출일).toLocaleString()}</div>
-              ${s.메모 ? `<div style="font-size:11px;color:#333;margin-top:4px;background:#fff8e8;padding:4px 6px;border-left:3px solid #e8a020;">"${s.메모}"</div>` : ''}
-              ${fileHtml}
-              <div style="display:flex;gap:6px;margin-top:8px;">
-                <button onclick="approveMissionSubmission(${JSON.stringify(s.id)},${JSON.stringify(s.학생이름)},${JSON.stringify(s.미션제목)},${s.보상도토리})"
-                  style="padding:4px 12px;background:#2a7a2a;color:#fff;border:2px solid #1a5a1a;font-size:10px;font-weight:700;cursor:pointer;">
-                  ✅ 승인 (+${s.보상도토리}🌰)
-                </button>
-                <button onclick="rejectMissionSubmission(${JSON.stringify(s.id)},${JSON.stringify(s.학생이름)},${JSON.stringify(s.미션제목)})"
-                  style="padding:4px 12px;background:#aa2222;color:#fff;border:2px solid #881111;font-size:10px;font-weight:700;cursor:pointer;">
-                  ❌ 거절
-                </button>
-              </div>
+          const card = document.createElement('div');
+          card.style.cssText = 'background:#fffde8;border:2px solid #ccaa00;padding:10px;margin-bottom:8px;border-radius:2px;';
+          card.innerHTML = `
+            <div style="font-size:12px;font-weight:800;color:#333;">🎯 ${s.미션제목}</div>
+            <div style="font-size:11px;color:#555;margin-top:2px;">학생: ${s.학생이름} (${s.학생코드})</div>
+            <div style="font-size:10px;color:#888;">제출일: ${new Date(s.제출일).toLocaleString()}</div>
+            ${s.메모 ? `<div style="font-size:11px;color:#333;margin-top:4px;background:#fff8e8;padding:4px 6px;border-left:3px solid #e8a020;">"${s.메모}"</div>` : ''}
+            ${s.파일링크 ? `<a href="${s.파일링크}" target="_blank" style="display:inline-block;margin-top:4px;padding:3px 8px;background:#4878d0;color:#fff;border:2px solid #2050a0;font-size:10px;font-weight:700;text-decoration:none;">📎 첨부파일 보기</a>` : ''}
+            <div style="display:flex;gap:6px;margin-top:8px;">
+              <button class="ms-approve-btn" style="padding:4px 12px;background:#2a7a2a;color:#fff;border:2px solid #1a5a1a;font-size:10px;font-weight:700;cursor:pointer;">✅ 승인 (+${s.보상도토리}🌰)</button>
+              <button class="ms-reject-btn" style="padding:4px 12px;background:#aa2222;color:#fff;border:2px solid #881111;font-size:10px;font-weight:700;cursor:pointer;">❌ 거절</button>
             </div>`;
+          card.querySelector('.ms-approve-btn').addEventListener('click', () =>
+            approveMissionSubmission(s.id, s.학생이름, s.미션제목, s.보상도토리));
+          card.querySelector('.ms-reject-btn').addEventListener('click', () =>
+            rejectMissionSubmission(s.id, s.학생이름, s.미션제목));
+          div.appendChild(card);
         });
       })
       .catch(() => { div.innerHTML = '<div style="color:#cc2222;font-size:11px;padding:8px;">불러오기 실패</div>'; });

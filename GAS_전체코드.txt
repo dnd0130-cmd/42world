@@ -600,7 +600,7 @@ function submitMission(body) {
       var saved = folder.createFile(blob);
       saved.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
       fileUrl = saved.getUrl();
-    } catch(fe) { fileUrl = ''; }
+    } catch(fe) { return { success: false, error: '파일 업로드 실패: ' + fe.toString() }; }
   }
   var subSheet = ss.getSheetByName('미션제출');
   if (!subSheet) {
